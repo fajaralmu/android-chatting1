@@ -102,11 +102,11 @@ public class HomeActivity extends FragmentActivity {
 
                         break;
                     case R.id.navigation_chatting_list:
-                        switchFragment(R.layout.fragment_chatting_list, "Menu");
+                        switchFragment(R.layout.fragment_chatting_list, "Chatting List");
                         break;
 
                     case R.id.navigation_search:
-                        switchFragment(R.layout.fragment_search, null ,false);
+                        switchFragment(R.layout.fragment_search, "Search");
                         break;
                 }
 
@@ -141,7 +141,9 @@ public class HomeActivity extends FragmentActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction;
-        if(withAnimation) {
+
+        //TODO: decide the animations
+        if(false){//withAnimation) {
             fragmentTransaction = fragmentManager.beginTransaction().
                     setCustomAnimations( //https://developer.android.com/training/basics/fragments/animate
                             R.anim.anim_slide_in,  // enter

@@ -7,21 +7,35 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.HashMap;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
+import com.fajar.android.chatting1.handlers.BaseHandler;
 import com.fajar.android.chatting1.util.Logs;
 
-public class BaseFragment extends Fragment {
+public class BaseFragment<H extends  BaseHandler> extends Fragment {
 
     protected Integer fragmentId = null;
     protected SharedPreferences sharedpreferences;
     private static HashMap<Integer, Class> customFragments = initCustomFragments();
     private String breadCumbLabel = null;
+    protected View view;
+    protected H handler;
+    protected ProgressBar loader;
 
     public BaseFragment() {
+    }
+
+    public void setHandler(H handler){
+        this.handler = handler;
+    }
+
+    protected  <T extends View> T findById(int id){
+        if(null == view){return null;}
+        return view.findViewById(id);
     }
 
     public final String getBreadCumbLabel(){
@@ -97,6 +111,25 @@ public class BaseFragment extends Fragment {
 
     public void setFragmentId(int fragmentId) {
         this.fragmentId = fragmentId;
+    }
+
+    public  void startLoading(){
+        if(null == loader){
+            return;
+        }
+        loader.setVisibility(View.VISIBLE);
+    }
+
+    public void stopLoading(){
+
+        setLoaderGone();
+    }
+
+    protected void setLoaderGone(){
+        if(null == loader){
+            return;
+        }
+        loader.setVisibility(View.GONE);
     }
 }
 

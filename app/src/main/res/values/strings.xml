@@ -13,72 +13,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="home_preface1">Pendidikan adalah misi kerasulan menuju visi pembentukan
-        manusia pembelajar. Dalam prosesnya, Rasul, Sang Guru mendidik
-        melalui metode mengajar (ta\'lim) dengan membangun afeksi
-        melalui keagungan ayat-Nya (tilawah) dan menyingkirkan karakter
-        buruk manusia (tazkiyah)</string>
-    <string name="home_preface2">Sebagai alur teladan, manusia dengan jiwa dan jati diri mulia yang
-        terasah hatinya dengan firman Allah akan mengolah pengetahuan
-            menjadi karya yang bernilai bagi Allah dan semesta-Nya.</string>
-    <string name="home_preface3">Saatnya kita membuktikan kepada dunia, bahwa Al Qur\'an dan
-        Sunnah adalah instruksi kerja yang rapi dan sempurna. Induk dari
-        segala kualitas. Yang terpancar dalam jaminan mutu pendidikan di
-        Chatting International Islamic School</string>
 
 
-    <string name="splash_screen_ayah">Dialah yang mengutus kepada kaum yang buta huruf seorang rasul
-        diantara mereka, yang membacakan ayat-ayat Nya kepada mereka,
-        mensucikan mereka dan mengajarkan mereka kitab dan hikmah
-        (sunnah)</string>
-
-    <!-- Fragments -->
-    <string name="program_pendidikan_1">Program pendidikan di unit pesantren ditempuh dalam
-            waktu 6 (enam) tahun dalam jenjang Madrasah Tsanawiyah
-            (MTs) dan Madrasah Aliyah (MA). Pembinaan para santri
-            dicakupkan dalam tiga proses utama (core process), yakni :
-            akademik, keasramaan dan tahfidzul Qur an. Kurikulum
-            akademik yang diterapkan adalah Kurikulum 2013 yang
-            disesusaikan dengan kebutuhan masyarakat serta kurikulum
-            khas pesantren.</string>
-    <string name="program_pendidikan_2">Di lingkungan asrama, para santri mendapat pembinaan
-            karakter berdasarkan prinsip 10 Kepribadian Muslim dan
-            pembiasaan berbahasa internasional (Arab dan Inggris). Di
-            samping itu para santri mendapat pendampingan dalam
-            kegiatan tahfidz Al-Qur an bersama musyrif agar tercapai
-            minimal 20 juz sebagai syarat kelulusan.</string>
-
-    <string name="program_pengembangan_1">Ekstrakurikuler: Bela diri Thifan, Kepanduan/Pramuka,
-            panahan, futsal, renang, KINEMATIKA (Komunitas Studi Sains
-            dan Matematika), IT Club (programming dan desain grafis),
-            dan sebagainya.</string>
-    <string name="program_pengembangan_2">Muhadharah (pidato bahasa Arab/Inggris), Outbound, Studi
-            Ekskursi, PDPU (Praktik Dakwah dan Pengembangan Ummat),
-            LDKS (Latihan Dasar Kepemimpinan Santri), Outing class, dan
-            sebagainya.</string>
-    <string name="fasilitas">Asrama , Ruang Kelas ber-AC, Perpustakaan,
-            Laboratorium IPA, Laboratorium Bahasa, Laboratorium
-            Komputer, Kantin, UKS, Lapangan Olahraga.</string>
-    <string name="alumni_dalam_negeri">Institut Teknologi Bandung (ITB), Universitas Indonesia (UI), Universitas Gadjah Mada (UGM), Institut Pertanian Bogor (IPB), Universitas Diponegoro
-        (UNDIP), Universitas Sebelas Maret (UNS), Universitas Brawijaya (UB), Institut Teknologi Sepuluh Nopember (ITS), Universitas Airlangga (UNAIR),
-        Universitas Islam Negeri Syarif Hidayatullah, Universitas Telkom, Universitas Pertamina, Sekolah Tinggi Akuntansi Negara (STAN), LIPIA dan sebagainya.</string>
-    <string name="alumni_luar_negeri">Universitas Islam Madinah, Universitas Ummul Qura Makkah, Universitas Al Azhar Kairo, Eskisehir Osmangazi Universitasi Turki, Fatih Sultan Mehmet
-        Universitesi Turki, International University of Africa Khartoum Sudan, International Islamic University of Malaysia (IIUM) dan sebagainya.</string>
-
-    <string name="curriculum_academic">
-        Dengan inovasi yang terus menerus, kami kreasikan kurikulum yang mengintegrasikan Ilmu-ilmu Kauniyah dan Diniyah untuk pembelajaran yang lebih mudah, menyenangkan dan tepat sasaran.
-    </string>
-    <string name="curriculum_tahfiz">
-        Program tahfidz Al Quran dengan metode halaqah (kelompok) dibawah bimbingan seorang musyrif, adalah untuk memastikan hafalan baik, benar dan sesuai dengan hukum tajwid dan qiroah.
-    </string>
-    <string name="curriculum_boarding">
-        Pembiasaan hidup displin, mandiri, peduli, bersih dan sehat, juga kesadaran untuk melaksanakan ibadah berdasarkan pemahaaman yang benar, adalah pola pembentukan karakter di pesantren.
-    </string>
-    <string-array name="syarat_pendaftaran_umum">
-        <item>Laki-laki</item>
-        <item>Mengisi pendaftaran online dengan melengkapi data dan berkas berikut.</item>
-        <item>Membayar biaya pendaftaran sebesar Rp 303.000 (Jalur Bea-siswa Mts) atau Rp 606.000 (Jalur MTs Reguler dan MA)</item>
-    </string-array>
     <string name="title_activity_static_menu_acitivy">StaticMenuAcitivy</string>
 
 </resources>

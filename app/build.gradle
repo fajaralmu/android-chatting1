@@ -85,6 +85,8 @@ dependencies {
     implementation 'javax.xml:jaxp-api:1.4.2'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
+    //source code: https://github.com/fajaralmu/reltime-vidcall //build manually
+    implementation 'com.fajar:livestreaming:1.0.0-SNAPSHOT:dto'
     // https://mvnrepository.com/artifact/com.google.android.material/material
     //implementation group: 'com.google.android.material', name: 'material', version: '1.0.0-alpha1'
     // https://mvnrepository.com/artifact/androidx.viewpager/viewpager
