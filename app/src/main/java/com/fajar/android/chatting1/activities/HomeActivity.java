@@ -63,7 +63,7 @@ public class HomeActivity extends FragmentActivity {
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        switchFragment(R.layout.fragment_preface);
+        switchFragment(R.layout.fragment_home);
         super.onPostCreate(savedInstanceState);
     }
 
@@ -97,16 +97,16 @@ public class HomeActivity extends FragmentActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
-                    case R.id.navigation_preface:
+                    case R.id.navigation_home:
                        switchHomePage();
 
                         break;
-                    case R.id.navigation_catalog:
-                        switchFragment(R.layout.fragment_catalog, "Menu");
+                    case R.id.navigation_chatting_list:
+                        switchFragment(R.layout.fragment_chatting_list, "Menu");
                         break;
 
-                    case R.id.navigation_agenda:
-                        switchFragment(R.layout.fragment_base_news, null ,false);
+                    case R.id.navigation_search:
+                        switchFragment(R.layout.fragment_search, null ,false);
                         break;
                 }
 
@@ -117,7 +117,7 @@ public class HomeActivity extends FragmentActivity {
     }
 
     private void switchHomePage() {
-        switchFragment(R.layout.fragment_preface, "Home");
+        switchFragment(R.layout.fragment_home, "Home");
     }
 
     public void switchFragmentInCatalogPage(int fragmentId, String breadCumbLabel) {
@@ -175,12 +175,12 @@ public class HomeActivity extends FragmentActivity {
         //if in catalog
         if (isInsideCatalogPage()) {
             setInsideCatalogPage(false);
-            bottomNavigationView.setSelectedItemId(R.id.navigation_catalog);
+            bottomNavigationView.setSelectedItemId(R.id.navigation_chatting_list);
 
-        } else if (currentFragment != R.layout.fragment_preface) {
+        } else if (currentFragment != R.layout.fragment_home) {
             switchHomePage();
-            bottomNavigationView.setSelectedItemId(R.id.navigation_preface);
-        } else if (currentFragment == R.layout.fragment_preface) {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        } else if (currentFragment == R.layout.fragment_home) {
             AlertUtil.confirm(this, "Exit Application?", this::exitApplication);
         }
 

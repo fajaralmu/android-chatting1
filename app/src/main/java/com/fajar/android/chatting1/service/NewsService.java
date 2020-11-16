@@ -93,7 +93,7 @@ public class NewsService {
     }
 
     private PostResponse callGetAgenda()   {
-        String endPoint = "http://chatting.sch.id/index.php/api/homepage/agenda";
+        String endPoint = "http://kafila.sch.id/index.php/api/homepage/agenda";
         System.out.println("callGetAgenda to: "+endPoint);
         try {
             ResponseEntity<PostResponse> response = restTemplate.exchange(endPoint, HttpMethod.GET, httpEntity(),
@@ -106,7 +106,7 @@ public class NewsService {
     }
 
     public PostResponse callGetNews(int page) {
-        String endPoint = "http://chatting.sch.id/index.php/api/homepage/news?page=" + page;
+        String endPoint = "http://kafila.sch.id/index.php/api/homepage/news?page=" + page;
         Logs.log("call service get news ", endPoint);
         try{
 //        String endPoint = "http://192.168.0.103/chatting/get_news.json";

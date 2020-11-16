@@ -18,18 +18,18 @@ import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
 
-public class CatalogFragment extends BaseFragment{
+public class ChattingListFragment extends BaseFragment{
     protected SharedPreferences sharedpreferences;
     private View view;
 
-    public CatalogFragment(){
+    public ChattingListFragment(){
         Logs.log("Catalog Fragment Created");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_catalog, container, false);
+        view = inflater.inflate(R.layout.fragment_chatting_list, container, false);
         sharedpreferences = getActivity().getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, Context.MODE_PRIVATE);
         initComponents();
         initEvents();
@@ -50,49 +50,9 @@ public class CatalogFragment extends BaseFragment{
     private void initComponents() {
 
     }
-
-
     private void initEvents(){
 
         Logs.log("Catalog Fragment initEvents");
-    }
-    private View.OnClickListener gotoMenu(final int fragmentId){
-        return gotoMenu(fragmentId, null);
-    }
-    private View.OnClickListener gotoMenu(final int fragmentId, final String breadCumbLabel) {
-
-        return  (View v)-> {
-                    switchFragment(fragmentId, breadCumbLabel);
-            };
-    }
-    private View.OnClickListener exit() {
-        final Context ctx = this.getContext();
-        return new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                DialogInterface.OnClickListener callback = new DialogInterface.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                        exitApplication();
-                    }
-                };
-                AlertUtil.confirm(ctx, "Exit?", callback);
-
-            }
-        };
-    }
-    private void switchFragment(int fragmentId, String breadCumbLabel){
-
-        HomeActivity parentActivity = null;
-        if(getActivity() instanceof HomeActivity){
-            parentActivity = (HomeActivity) getActivity();
-        } else{
-            return;
-        }
-        parentActivity.switchFragmentInCatalogPage(fragmentId, breadCumbLabel);
-
     }
 
 }

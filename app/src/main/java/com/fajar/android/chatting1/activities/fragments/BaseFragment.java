@@ -12,9 +12,6 @@ import java.util.HashMap;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
-import com.fajar.android.chatting1.activities.fragments.post.AgendaFragment;
-import com.fajar.android.chatting1.activities.fragments.post.NewsFragment;
-import com.fajar.android.chatting1.activities.fragments.post.NewsFragmentView;
 import com.fajar.android.chatting1.util.Logs;
 
 public class BaseFragment extends Fragment {
@@ -91,10 +88,9 @@ public class BaseFragment extends Fragment {
 
     private static HashMap<Integer, Class> initCustomFragments() {
         HashMap<Integer, Class> customFragments = new HashMap<Integer, Class>();
-        customFragments.put(R.layout.fragment_catalog, CatalogFragment.class);
-        customFragments.put(R.layout.fragment_agenda, AgendaFragment.class);
-        customFragments.put(R.layout.fragment_news, NewsFragment.class);
-        customFragments.put(R.layout.fragment_base_news, NewsFragmentView.class);
+        customFragments.put(R.layout.fragment_chatting_list, ChattingListFragment.class);
+        customFragments.put(R.layout.fragment_home, HomeFragment.class);
+        customFragments.put(R.layout.fragment_search, SearchFragment.class);
 
         return customFragments;
     }
