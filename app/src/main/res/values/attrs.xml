@@ -1,0 +1,29 @@
+<resources>
+
+    <!-- Declare custom theme attributes that allow changing which styles are
+         used for button bars depending on the API level.
+         ?android:attr/buttonBarStyle is new as of API 11 so this is
+         necessary to support previous API levels. -->
+    <declare-styleable name="ButtonBarContainerTheme">
+        <attr name="metaButtonBarStyle" format="reference" />
+        <attr name="metaButtonBarButtonStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="MenuButton">
+        <attr name="drawableId" format="integer" />
+        <attr name="buttonLabel" format="string" />
+    </declare-styleable>
+    <declare-styleable name="ImageLabel">
+        <attr name="imageLabelDrawableId" format="integer" />
+        <attr name="imageLabelText" format="string" />
+    </declare-styleable>
+    <declare-styleable name="NewsItem">
+        <attr name="newsItemThumbnail" format="integer" />
+        <attr name="newsItemTitle" format="string" />
+        <attr name="newsItemDate" format="string" />
+    </declare-styleable>
+    <declare-styleable name="ChattingFooter">
+    </declare-styleable>
+    <declare-styleable name="ChattingHeader">
+    </declare-styleable>
+</resources>
