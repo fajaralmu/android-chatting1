@@ -5,6 +5,9 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 public class AlertUtil {
+    public static void YesAlert(Context ctx, String content){
+        YesAlert(ctx, "Info", content);
+    }
     public static void YesAlert(Context ctx, String title, String content){
         AlertDialog.Builder a_builder = new AlertDialog.Builder(ctx);
         a_builder.setMessage(content)

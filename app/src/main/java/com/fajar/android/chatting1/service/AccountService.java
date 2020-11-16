@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public class AccountService {
     private static AccountService instance = null;
     private AccountService(){
@@ -24,14 +26,36 @@ public class AccountService {
         return instance;
     }
 
+    public WebResponse getUser(String requestKey){
+        String endPoint = Endpoints.ENDPOINT_GET_USER;
+        System.out.println("call register to: "+endPoint);
+
+        try {
+            ResponseEntity<WebResponse> responseEntity = Commons.getRestTemplate().exchange(endPoint, HttpMethod.POST, Commons.httpEntityWithRequestKey(null, requestKey),
+                    WebResponse.class);
+            WebResponse response =  responseEntity.getBody();
+            Logs.log("get user: ", response.getRegisteredRequest());
+            return response;
+        }catch ( Exception ex){
+            Logs.log("ERROR getUser: ", ex);
+            throw ex;
+        }
+    }
+
 
     public WebResponse register(String username){
         String endPoint = Endpoints.ENDPOINT_REGISTER;
         System.out.println("call register to: "+endPoint);
+
         try {
-            ResponseEntity<WebResponse> response = Commons.getRestTemplate().exchange(endPoint, HttpMethod.POST, Commons.httpEntity(WebRequest.builder().username(username).build()),
+            ResponseEntity<WebResponse> responseEntity = Commons.getRestTemplate().exchange(endPoint, HttpMethod.POST, Commons.httpEntity(WebRequest.builder().username(username).build()),
                     WebResponse.class);
-            return  response.getBody();
+            WebResponse response =  responseEntity.getBody();
+            List<String> requestKey = responseEntity.getHeaders().get("request_key");
+            Logs.log("requestKey: ", requestKey.get(0));
+            Logs.log("response: ", response);
+            response.setMessage(requestKey.get(0));
+            return response;
         }catch ( Exception ex){
             Logs.log("ERROR register: ", ex);
             throw ex;

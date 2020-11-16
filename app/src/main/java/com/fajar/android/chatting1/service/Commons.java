@@ -6,10 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Commons {
@@ -18,8 +22,11 @@ public class Commons {
 
     public static RestTemplate getRestTemplate(){
         if(null == restTemplate) {
-            restTemplate = new RestTemplate();
-            restTemplate.setErrorHandler(errorHandler());
+            ClientHttpRequestFactory factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
+
+              restTemplate = new RestTemplate(factory);
+            //restTemplate = new RestTemplate();
+//            restTemplate.setErrorHandler(errorHandler());
         }
         return restTemplate;
     }
@@ -37,6 +44,13 @@ public class Commons {
 
     public static <T> HttpEntity<T> httpEntity(T payload){
         return httpEntity(payload,null);
+
+    }
+
+    public static <T> HttpEntity<T> httpEntityWithRequestKey(T payload, String requestKey){
+        Map<String , String> map = new HashMap<>();
+        map.put("request_key", requestKey);
+        return httpEntity(payload,map);
     }
 
     public static <T> HttpEntity<T> httpEntity(T payload, Map<String, String> header) {

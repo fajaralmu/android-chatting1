@@ -8,9 +8,12 @@ import android.os.Bundle;
 import java.io.Serializable;
 
 import com.fajar.android.chatting1.constants.Extras;
+import com.fajar.android.chatting1.service.AccountService;
+import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.android.chatting1.util.Navigate;
 import com.fajar.android.chatting1.R;
+import com.fajar.livestreaming.dto.WebResponse;
 
 public class WelcomingScreenActivity extends BaseActivity {
 
@@ -20,11 +23,10 @@ public class WelcomingScreenActivity extends BaseActivity {
     }
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkIntentExras();
-        goToHomePage();
+        checkUser();
     }
 
 
@@ -60,8 +62,18 @@ public class WelcomingScreenActivity extends BaseActivity {
         System.exit(1);
     }
 
+    private void checkUser() {
+        String existingRequestKey = SharedPreferenceUtil.getValue(sharedpreferences, "request_key");
+        if (existingRequestKey.isEmpty()) {
+            goToHomePage();
+            return;
+        }
+        getUser().execute(existingRequestKey);
+    }
+
     private void goToHomePage() {
-        new GoHome().execute(this);
+        Navigate.navigate(this, HomeActivity.class);
+//        new GoHome().execute(this);
     }
 
 
@@ -77,5 +89,36 @@ public class WelcomingScreenActivity extends BaseActivity {
             Navigate.navigate(contexts[0], HomeActivity.class);
             return null;
         }
+    }
+
+    private void handleGetUser(WebResponse response) {
+        if (null == response) {
+            goToHomePage();
+            return;
+        }
+
+        SharedPreferenceUtil.putObject(sharedpreferences, "session_data", response);
+        goToHomePage();
+    }
+
+    private AsyncTask<String, Void, WebResponse> getUser() {
+        return new AsyncTask<String, Void, WebResponse>() {
+            @Override
+            protected WebResponse doInBackground(String... strings) {
+                try {
+                    WebResponse response = AccountService.instance().getUser(strings[0]);
+
+                    return response;
+                } catch (Exception e) {
+                }
+                Logs.log("Get user returns null");
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(WebResponse response) {
+                handleGetUser(response);
+            }
+        };
     }
 }
