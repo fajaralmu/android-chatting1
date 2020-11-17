@@ -3,6 +3,7 @@ package com.fajar.android.chatting1.activities.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,29 +12,38 @@ import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
+import com.fajar.android.chatting1.handlers.ChattingListFragmentHandler;
 import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
+import com.fajar.livestreaming.dto.RegisteredRequest;
+import com.fajar.livestreaming.dto.WebResponse;
 
-public class ChattingListFragment extends BaseFragment{
-    protected SharedPreferences sharedpreferences;
-    private View view;
+import java.util.List;
 
-    public ChattingListFragment(){
-        Logs.log("Catalog Fragment Created");
+public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandler> {
+
+    private LinearLayout chattingListLayout;
+    private Button buttonLoadChattingList;
+
+    public ChattingListFragment() {
+
+        setHandler(ChattingListFragmentHandler.getInstance(this));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_chatting_list, container, false);
-        sharedpreferences = getActivity().getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, Context.MODE_PRIVATE);
+        setSharedpreferences();
         initComponents();
         initEvents();
-        Logs.log("Catalog Fragment onCreateView");
         return view;
     }
 
@@ -43,16 +53,75 @@ public class ChattingListFragment extends BaseFragment{
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private <T extends View> T findViewById(int id){
-        return view.findViewById(id);
-    }
-
     private void initComponents() {
-
+        chattingListLayout = (LinearLayout) findById(R.id.chat_list_layout);
+        buttonLoadChattingList = findById(R.id.button_load_chatting_list);
+        loader = findById(R.id.loader_chatting_list);
     }
-    private void initEvents(){
 
-        Logs.log("Catalog Fragment initEvents");
+    private void initEvents() {
+        setLoaderGone();
+        chattingListLayout.removeAllViews();
+        buttonLoadChattingList.setOnClickListener(loadChattingPartnerListener());
     }
+
+    private View.OnClickListener loadChattingPartnerListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonLoadChattingList.setVisibility(View.GONE);
+                handler.getChattingPartners(getRequestKey(), this::handleChattingPartners);
+            }
+
+            private void handleChattingPartners(WebResponse response, Exception e) {
+                buttonLoadChattingList.setVisibility(View.VISIBLE);
+                if (e != null) {
+                    AlertUtil.ErrorAlert(getActivity(), e);
+                    return;
+                }
+
+                populateChattingPartners(response);
+
+            }
+        };
+    }
+
+    private void populateChattingPartners(WebResponse response) {
+        chattingListLayout.removeAllViews();
+        if (response.getResultList().size() == 0) {
+            showInfoEmpty();
+            return;
+        }
+        List partners = response.getResultList();
+        for (Object partner :
+                partners) {
+            chattingListLayout.addView(partnerItemComponent((RegisteredRequest) partner));
+        }
+    }
+
+    private LinearLayout partnerItemComponent(RegisteredRequest account) {
+
+        LinearLayout.LayoutParams params =  new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(5,5,5,5);
+
+        LinearLayout layout = new LinearLayout(getActivity());
+        layout.setLayoutParams(params);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setBackgroundColor(Color.YELLOW);
+
+        TextView name = new TextView(getContext());
+        name.setText(account.getUsername());
+
+        layout.addView(name);
+
+        return layout;
+    }
+
+    private void showInfoEmpty() {
+        TextView textView = new TextView(getActivity());
+        textView.setText("No Partner yet.");
+        chattingListLayout.addView(textView);
+    }
+
 
 }

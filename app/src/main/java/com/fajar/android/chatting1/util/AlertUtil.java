@@ -9,6 +9,10 @@ public class AlertUtil {
         YesAlert(ctx, "Info", content, null);
     }
 
+    public static void ErrorAlert(Context context, Exception error){
+        YesAlert(context, "Error", error.getMessage());
+    }
+
     public static void YesAlert(Context ctx, String title, String content) {
         YesAlert(ctx, title, content, null);
     }

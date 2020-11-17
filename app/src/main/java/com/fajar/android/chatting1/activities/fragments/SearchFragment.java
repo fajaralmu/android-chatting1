@@ -30,8 +30,9 @@ public class SearchFragment extends BaseFragment<SearchFragmentHandler>{
 
     private TextView accountName, accountId, accountRegisteredDate;
     private EditText inputPartnerId;
-    private ImageButton buttonSearch;
+    private ImageButton buttonSearch, buttonInitializeChat;
     private CardView accountResultCard;
+    private RegisteredRequest partnerAccount;
 
     public SearchFragment(){
        setHandler(SearchFragmentHandler.getInstance(this));
@@ -61,12 +62,23 @@ public class SearchFragment extends BaseFragment<SearchFragmentHandler>{
         accountRegisteredDate = findById(R.id.result_account_date);
         loader = findById(R.id.loader_search_fragment);
         buttonSearch =  findById(R.id.button_search_partner);
+        buttonInitializeChat =  findById(R.id.button_initialize_chat);
         inputPartnerId = findById(R.id.search_partner_id);
     }
     private void initEvents(){
         setLoaderGone();
         accountResultCard.setVisibility(View.GONE);
         buttonSearch.setOnClickListener(searchPartnerListener());
+        buttonInitializeChat.setOnClickListener(initializeChatListener());
+    }
+
+    private View.OnClickListener initializeChatListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initializeChat();
+            }
+        };
     }
 
     private View.OnClickListener searchPartnerListener() {
@@ -76,6 +88,25 @@ public class SearchFragment extends BaseFragment<SearchFragmentHandler>{
                 searchPartner();
             }
         };
+    }
+
+    private void initializeChat(){
+        if(null == partnerAccount){
+            AlertUtil.YesAlert(getActivity(), "Invalid Partner");
+            return;
+        }
+        handler.initializeChat(partnerAccount.getRequestId(), getRequestKey(), new MyConsumer<WebResponse>(){
+
+            @Override
+            public void accept(WebResponse response, Exception error) {
+                stopLoading();
+                if(null != error){
+                    AlertUtil.YesAlert(getContext(), "Initialize Chat Failed", error.getMessage());
+                } else {
+                    AlertUtil.YesAlert(getContext(), "Success Initialize Chat");
+                }
+            }
+        });
     }
 
     private void searchPartner() {
@@ -100,10 +131,10 @@ public class SearchFragment extends BaseFragment<SearchFragmentHandler>{
     }
 
     private void populateSessionData(WebResponse sessionData) {
-        RegisteredRequest account = sessionData.getRegisteredRequest();
-        accountName.setText(account.getUsername());
-        accountId.setText(account.getRequestId());
-        accountRegisteredDate.setText(account.getCreated().toString());
+        partnerAccount = sessionData.getRegisteredRequest();
+        accountName.setText(partnerAccount.getUsername());
+        accountId.setText(partnerAccount.getRequestId());
+        accountRegisteredDate.setText(partnerAccount.getCreated().toString());
 
         accountResultCard.setVisibility(View.VISIBLE);
     }

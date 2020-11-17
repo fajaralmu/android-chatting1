@@ -1,6 +1,7 @@
 package com.fajar.android.chatting1.handlers;
 
 import com.fajar.android.chatting1.activities.fragments.BaseFragment;
+import com.fajar.livestreaming.dto.WebResponse;
 
 public abstract class BaseHandler<F extends BaseFragment> {
 
@@ -16,4 +17,5 @@ public abstract class BaseHandler<F extends BaseFragment> {
     protected void stopLoading(){
         fragment.stopLoading();
     }
+
 }

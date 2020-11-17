@@ -102,6 +102,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Registered Date" />
+
+                    <ImageButton
+                        android:id="@+id/button_initialize_chat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/holo_blue_dark"
+                        android:src="@android:drawable/sym_action_chat" />
+
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
