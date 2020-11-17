@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.fajar.android.chatting1.R;
@@ -21,6 +23,10 @@ import java.util.List;
 public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
 
     private LinearLayout messagesLayout;
+    private EditText inputMessage;
+    private ImageButton buttonSendMessage;
+
+    private RegisteredRequest partner;
 
     public ChatRoomFragment() {
         setHandler(ChatRoomFragmentHandler.getInstance(this));
@@ -64,15 +70,37 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
     private void initComponents() {
         messagesLayout = findById(R.id.chat_room_message_list);
         loader = findById(R.id.loader_chat_room);
+        inputMessage = findById(R.id.chat_room_message_input);
+        buttonSendMessage = findById(R.id.button_send_message);
     }
 
     private void initEvents() {
         setLoaderGone();
         getMessages();
+        buttonSendMessage.setOnClickListener(this::sendMessage);
+    }
+
+    private void sendMessage(View view) {
+        String message = inputMessage.getText().toString();
+        if(null == message || message.isEmpty()){
+            return;
+        }
+        loader.setVisibility(View.VISIBLE);
+        handler.sendMessage(partner.getRequestId(), getRequestKey(), message, this::handleSendMessage);
+    }
+
+    private void handleSendMessage(WebResponse response, Exception e) {
+        stopLoading();
+        if(null != e){
+            return;
+        }
+        inputMessage.setText("");
+        ChatMessageItem chatMessageItem = new ChatMessageItem(response.getChatMessage(), getActivity());
+        messagesLayout.addView(chatMessageItem);
     }
 
     private void getMessages() {
-        RegisteredRequest partner = SharedPreferenceUtil.getObject(sharedpreferences, "chat_partner", RegisteredRequest.class);
+        this.partner = SharedPreferenceUtil.getObject(sharedpreferences, "chat_partner", RegisteredRequest.class);
         getMessages(partner.getRequestId());
     }
 

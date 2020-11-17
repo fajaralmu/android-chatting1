@@ -2,6 +2,7 @@ package com.fajar.android.chatting1.service;
 
 import com.fajar.android.chatting1.constants.Endpoints;
 import com.fajar.android.chatting1.util.Logs;
+import com.fajar.livestreaming.dto.WebRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 
 import org.springframework.http.HttpMethod;
@@ -58,6 +59,21 @@ public class ChattingService {
             return response;
         }catch ( Exception ex){
             Logs.log("ERROR getChattingMessages: ", ex);
+            throw ex;
+        }
+    }
+    public WebResponse sendMessage(String partnerId, String requestKey, String message){
+        String endPoint = Endpoints.ENDPOINT_SEND_CHATTING_MESSAGES+partnerId;
+
+        try {
+            WebRequest payload = WebRequest.builder().message(message).build();
+            ResponseEntity<WebResponse> responseEntity = Commons.getRestTemplate().exchange(endPoint, HttpMethod.POST, Commons.httpEntityWithRequestKey(payload, requestKey),
+                    WebResponse.class);
+            WebResponse response =  responseEntity.getBody();
+            Logs.log("SUCCESS sendMessage");
+            return response;
+        }catch ( Exception ex){
+            Logs.log("ERROR sendMessage: ", ex);
             throw ex;
         }
     }

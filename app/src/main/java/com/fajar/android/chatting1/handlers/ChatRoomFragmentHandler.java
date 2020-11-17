@@ -34,6 +34,10 @@ public class ChatRoomFragmentHandler extends BaseHandler<ChatRoomFragment> {
         getChattingMessagesTask(callback).execute(partnerId, requestKey);
     }
 
+    public void sendMessage(String partnerId, String requestKey, String messageBody, MyConsumer<WebResponse> callback){
+        sendMessageTask(callback).execute(partnerId, requestKey, messageBody);
+    }
+
     private AsyncTask<String, Void, WebResponse> getChattingMessagesTask(MyConsumer<WebResponse> callback) {
         return new AsyncTask<String, Void, WebResponse>() {
 
@@ -68,6 +72,30 @@ public class ChatRoomFragmentHandler extends BaseHandler<ChatRoomFragment> {
                     webResponse.setResultList(partners);
                 }
 
+                callback.accept(webResponse, exception);
+            }
+        };
+    }
+
+    private AsyncTask<String, Void, WebResponse> sendMessageTask(MyConsumer<WebResponse> callback) {
+        return new AsyncTask<String, Void, WebResponse>() {
+
+            private Exception exception;
+
+            @Override
+            protected WebResponse doInBackground(String... strings) {
+                try {
+                    return ChattingService.instance().sendMessage(strings[0], strings[1], strings[2]);
+                } catch (Exception e) {
+                    this.exception = e;
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(WebResponse webResponse) {
+                //     stopLoading();
+                Logs.log("onPostExecute sendMessageTask");
                 callback.accept(webResponse, exception);
             }
         };
