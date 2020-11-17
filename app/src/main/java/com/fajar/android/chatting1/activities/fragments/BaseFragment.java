@@ -15,6 +15,7 @@ import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.BaseHandler;
+import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.Logs;
 
 public class BaseFragment<H extends  BaseHandler> extends Fragment {
@@ -138,6 +139,14 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
 
     public SharedPreferences getSharedPreferences() {
         return getActivity().getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, Context.MODE_PRIVATE);
+    }
+
+    public void setSharedpreferences(){
+        this.sharedpreferences = getSharedPreferences();
+    }
+
+    protected String getRequestKey(){
+        return SharedPreferenceUtil.getRequestKey(sharedpreferences);
     }
 }
 

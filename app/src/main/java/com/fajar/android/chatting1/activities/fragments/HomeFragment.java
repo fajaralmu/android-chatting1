@@ -27,7 +27,7 @@ import com.fajar.livestreaming.dto.WebResponse;
 public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     protected SharedPreferences sharedpreferences;
 
-    private TextView accountName, accountId, accountRegisteredDate;
+    private TextView accountName, accountId, accountRegisteredDate, accountUserAgent;
     private Button buttonInvalidate;
 
     public HomeFragment() {
@@ -54,6 +54,8 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
         accountId = findById(R.id.account_id);
         accountName = findById(R.id.account_name);
         accountRegisteredDate = findById(R.id.account_date);
+        accountUserAgent = findById(R.id.account_user_agent);
+
         buttonInvalidate = findById(R.id.button_invalidate);
         loader = findById(R.id.loader_home_fragment);
     }
@@ -97,7 +99,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
             }
         });
     }
- 
+
 
     private void goToWelcomingScreen() {
         Navigate.navigate(getActivity(), WelcomingScreenActivity.class);
@@ -108,6 +110,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
         accountName.setText(account.getUsername());
         accountId.setText(account.getRequestId());
         accountRegisteredDate.setText(account.getCreated().toString());
+        accountUserAgent.setText(account.getUserAgent());
     }
 
 
