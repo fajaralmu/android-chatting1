@@ -1,6 +1,8 @@
 package com.fajar.android.chatting1.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
@@ -18,10 +20,15 @@ import java.util.Map;
 
 import com.fajar.android.chatting1.activities.fragments.BaseFragment;
 import com.fajar.android.chatting1.constants.Extras;
+import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
+import com.fajar.android.chatting1.service.Commons;
+import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.android.chatting1.util.Navigate;
 import com.fajar.android.chatting1.R;
+import com.fajar.livestreaming.dto.RegisteredRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import static android.view.View.*;
 
@@ -32,6 +39,7 @@ public class HomeActivity extends FragmentActivity {
     private BottomNavigationView bottomNavigationView;
     private TextView breadCumb;
     private boolean insideCatalogPage;
+    private SharedPreferences sharedPreferences;
 
     private Map<Object, Bitmap> postBitmaps = new HashMap<>();
 
@@ -39,6 +47,7 @@ public class HomeActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        sharedPreferences = getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, Context.MODE_PRIVATE);
 //        startActivityForResult(getIntent(), TheApplication.REQUEST_CODE.value);
         StrictMode.setThreadPolicy(policy);
         Logs.log("ONCREATE....");
@@ -98,11 +107,11 @@ public class HomeActivity extends FragmentActivity {
                 menuItem.setChecked(true);
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_home:
-                       switchHomePage();
+                        switchHomePage();
 
                         break;
                     case R.id.navigation_chatting_list:
-                        setInsideCatalogPage(true);
+
                         switchFragment(R.layout.fragment_chatting_list, "Chatting List");
                         break;
 
@@ -144,7 +153,7 @@ public class HomeActivity extends FragmentActivity {
         FragmentTransaction fragmentTransaction;
 
         //TODO: decide the animations
-        if(false){//withAnimation) {
+        if (false) {//withAnimation) {
             fragmentTransaction = fragmentManager.beginTransaction().
                     setCustomAnimations( //https://developer.android.com/training/basics/fragments/animate
                             R.anim.anim_slide_in,  // enter
@@ -160,7 +169,7 @@ public class HomeActivity extends FragmentActivity {
              R.anim.slide_out
              *
              */
-        }else {
+        } else {
             fragmentTransaction = fragmentManager.beginTransaction();
         }
 
@@ -202,7 +211,14 @@ public class HomeActivity extends FragmentActivity {
         return insideCatalogPage;
     }
 
-    public void enterChatRoom() {
-        switchFragment(R.layout.fragment_chat_room, "Chatroom");
+    public void enterChatRoom(RegisteredRequest partner) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        try {
+            editor.putString("chat_partner", Commons.getObjectMapper().writeValueAsString(partner));
+            editor.commit();
+            switchFragmentInCatalogPage(R.layout.fragment_chat_room, "Chatroom::" + partner.getUsername());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -68,7 +68,7 @@ public class WelcomingScreenActivity extends BaseActivity {
         registerForm.setVisibility(View.GONE);
         buttonRegister.setOnClickListener(this::register);
 
-        inputUsername.setText(android.os.Build.MODEL);
+        inputUsername.setText(android.os.Build.MODEL.replace(" ", "_"));
     }
 
     @Override

@@ -31,17 +31,6 @@ public class ChatListItem extends LinearLayout {
     final boolean loadImage;
     final HomeActivity parentActivity;
 
-    public ChatListItem(Context context, @Nullable AttributeSet attrs, boolean loadImage, Activity parentActivity) {
-        super(context, attrs);
-        this.loadImage = loadImage;
-        if (parentActivity instanceof HomeActivity) {
-            this.parentActivity = (HomeActivity) parentActivity;
-        } else {
-            this.parentActivity = null;
-        }
-        init(context, attrs);
-    }
-
     public ChatListItem(RegisteredRequest partnerAccount, boolean loadImage, Activity parentActivity) {
         super(parentActivity);
         this.loadImage = loadImage;
@@ -160,7 +149,7 @@ public class ChatListItem extends LinearLayout {
         if (null == partnerAccount) {
             return;
         }
-        parentActivity.enterChatRoom();
+        parentActivity.enterChatRoom(partnerAccount );
         // Navigate.openLink(partnerAccount.newsLink(), getContext());
     }
 
