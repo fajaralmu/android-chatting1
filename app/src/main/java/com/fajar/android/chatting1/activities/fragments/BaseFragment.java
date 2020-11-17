@@ -121,7 +121,14 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
             return;
         }
         Logs.log("START LOADER");
-        loader.setVisibility(View.VISIBLE);
+        if(loader.getVisibility() == View.GONE) {
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+                    loader.setVisibility(View.VISIBLE);
+//                }
+//            });
+        }
     }
 
     public void stopLoading(){
@@ -134,7 +141,14 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
             return;
         }
         Logs.log("STOP LOADER");
-        loader.setVisibility(View.GONE);
+        if(loader.getVisibility() == View.VISIBLE) {
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+                    loader.setVisibility(View.GONE);
+//                }
+//            });
+        }
     }
 
     public SharedPreferences getSharedPreferences() {

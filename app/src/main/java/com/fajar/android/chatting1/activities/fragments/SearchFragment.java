@@ -26,7 +26,7 @@ import com.fajar.livestreaming.dto.WebResponse;
 
 import androidx.cardview.widget.CardView;
 
-public class SearchFragment extends BaseFragment<SearchFragmentHandler>{
+public class SearchFragment extends BaseFragment<SearchFragmentHandler> {
 
     private TextView accountName, accountId, accountRegisteredDate;
     private EditText inputPartnerId;
@@ -34,73 +34,64 @@ public class SearchFragment extends BaseFragment<SearchFragmentHandler>{
     private CardView accountResultCard;
     private RegisteredRequest partnerAccount;
 
-    public SearchFragment(){
-       setHandler(SearchFragmentHandler.getInstance(this));
+    public SearchFragment() {
+        setHandler(SearchFragmentHandler.getInstance(this));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_search, container, false);
-        setSharedpreferences();
-        initComponents();
-        initEvents();
-        Logs.log("Catalog Fragment onCreateView");
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        setSharedpreferences();
+        initComponents();
+        initEvents();
         super.onViewCreated(view, savedInstanceState);
+
     }
+
     private void initComponents() {
 
-        accountResultCard  =   findById(R.id.card_partner_result);
+        accountResultCard = findById(R.id.card_partner_result);
         accountName = findById(R.id.result_account_name);
         accountId = findById(R.id.result_account_id);
         accountRegisteredDate = findById(R.id.result_account_date);
-        loader = findById(R.id.loader_search_fragment);
-        buttonSearch =  findById(R.id.button_search_partner);
-        buttonInitializeChat =  findById(R.id.button_initialize_chat);
+        loader = view.findViewById(R.id.loader_search_fragment);
+        buttonSearch = findById(R.id.button_search_partner);
+        buttonInitializeChat = findById(R.id.button_initialize_chat);
         inputPartnerId = findById(R.id.search_partner_id);
     }
-    private void initEvents(){
+
+    private void initEvents() {
         setLoaderGone();
         accountResultCard.setVisibility(View.GONE);
-        buttonSearch.setOnClickListener(searchPartnerListener());
-        buttonInitializeChat.setOnClickListener(initializeChatListener());
+        buttonSearch.setOnClickListener(this::searchPartnerListener);
+        buttonInitializeChat.setOnClickListener(this::initializeChatListener);
     }
 
-    private View.OnClickListener initializeChatListener() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initializeChat();
-            }
-        };
+    private void initializeChatListener(View v) {
+        initializeChat();
     }
 
-    private View.OnClickListener searchPartnerListener() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchPartner();
-            }
-        };
+    private void searchPartnerListener(View v) {
+        searchPartner();
     }
 
-    private void initializeChat(){
-        if(null == partnerAccount){
+    private void initializeChat() {
+        if (null == partnerAccount) {
             AlertUtil.YesAlert(getActivity(), "Invalid Partner");
             return;
         }
-        handler.initializeChat(partnerAccount.getRequestId(), getRequestKey(), new MyConsumer<WebResponse>(){
+        handler.initializeChat(partnerAccount.getRequestId(), getRequestKey(), new MyConsumer<WebResponse>() {
 
             @Override
             public void accept(WebResponse response, Exception error) {
                 stopLoading();
-                if(null != error){
+                if (null != error) {
                     AlertUtil.YesAlert(getContext(), "Initialize Chat Failed", error.getMessage());
                 } else {
                     AlertUtil.YesAlert(getContext(), "Success Initialize Chat");
@@ -117,11 +108,12 @@ public class SearchFragment extends BaseFragment<SearchFragmentHandler>{
             return;
         }
         accountResultCard.setVisibility(View.GONE);
+        loader.setVisibility(View.VISIBLE);
         handler.getPartner(partnerId, getRequestKey(), new MyConsumer<WebResponse>() {
             @Override
             public void accept(WebResponse response, Exception error) {
                 stopLoading();
-                if(error != null){
+                if (error != null) {
                     AlertUtil.YesAlert(getActivity(), "Partner Not Found!");
                     return;
                 }

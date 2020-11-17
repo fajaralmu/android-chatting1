@@ -45,22 +45,23 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_chatting_list, container, false);
-        setSharedpreferences();
-        initComponents();
-        initEvents();
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        setSharedpreferences();
+        initComponents();
+        initEvents();
         super.onViewCreated(view, savedInstanceState);
     }
+
 
     private void initComponents() {
         chattingListLayout =  findById(R.id.chat_list_layout);
         buttonLoadChattingList = findById(R.id.button_load_chatting_list);
-        loader = findById(R.id.loader_chatting_list);
+        loader =  view.findViewById(R.id.loader_chatting_list);
     }
 
     private void initEvents() {
@@ -79,6 +80,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     }
 
     private void getChattingPartners(){
+        loader.setVisibility(View.VISIBLE);
         handler.getChattingPartners(getRequestKey(), this::handleChattingPartners);
     }
     private void handleChattingPartners(WebResponse response, Exception e) {
