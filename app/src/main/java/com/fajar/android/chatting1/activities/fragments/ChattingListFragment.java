@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
+import com.fajar.android.chatting1.components.ChatListItem;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.ChattingListFragmentHandler;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
@@ -111,26 +112,9 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
         List partners = response.getResultList();
         for (Object partner :
                 partners) {
-            chattingListLayout.addView(partnerItemComponent((RegisteredRequest) partner));
+            ChatListItem chatListItem = new ChatListItem((RegisteredRequest) partner, false, getActivity());
+            chattingListLayout.addView(chatListItem);
         }
-    }
-
-    private LinearLayout partnerItemComponent(RegisteredRequest account) {
-
-        LinearLayout.LayoutParams params =  new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(5,5,5,5);
-
-        LinearLayout layout = new LinearLayout(getActivity());
-        layout.setLayoutParams(params);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setBackgroundColor(Color.YELLOW);
-
-        TextView name = new TextView(getContext());
-        name.setText(account.getUsername());
-
-        layout.addView(name);
-
-        return layout;
     }
 
     private void showInfoEmpty() {
