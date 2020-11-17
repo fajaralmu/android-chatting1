@@ -2,11 +2,13 @@ package com.fajar.android.chatting1.service;
 
 import android.content.SharedPreferences;
 
+import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +24,20 @@ public class SharedPreferenceUtil {
 
 
     public static WebResponse getChattingPartnersData(SharedPreferences sharedPreferences){
-        return getObject(sharedPreferences, "chatting_partners", WebResponse.class);
+        WebResponse webResponse = getObject(sharedPreferences, "chatting_partners", WebResponse.class);
+        if(null != webResponse && webResponse.getResultList().size() > 0){
+            List results = webResponse.getResultList();
+            List<RegisteredRequest> partners = new ArrayList<>();
+            for (Object result :
+                    results) {
+                if (result instanceof Map){
+                    RegisteredRequest registeredRequest = MapUtil.mapToObject((Map) result, RegisteredRequest.class);
+                    partners.add(registeredRequest);
+                }
+            }
+            webResponse.setResultList(partners);
+        }
+        return webResponse;
     }
 
     public static void putChattingPartnersData(SharedPreferences sharedPreferences, WebResponse data){
