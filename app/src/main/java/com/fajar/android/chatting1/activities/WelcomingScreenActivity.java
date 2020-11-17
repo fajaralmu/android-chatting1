@@ -76,9 +76,10 @@ public class WelcomingScreenActivity extends BaseActivity {
     }
 
     private void checkUser() {
-        String existingRequestKey = SharedPreferenceUtil.getValue(sharedpreferences, "request_key");
+        String existingRequestKey = SharedPreferenceUtil.getRequestKey(sharedpreferences);
         if (existingRequestKey.isEmpty()) {
-            goToHomePage();
+            stopLoading();
+            registerForm.setVisibility(View.VISIBLE);
             return;
         }
         getUser().execute(existingRequestKey);
@@ -109,6 +110,10 @@ public class WelcomingScreenActivity extends BaseActivity {
     }
 
     private void register(View v){
+        if(inputUsername.getText().toString().isEmpty()){
+            AlertUtil.YesAlert(this, "Invalid Username");
+            return;
+        }
         startLoading();
         registerForm.setVisibility(View.GONE);
         registerTask().execute(inputUsername.getText().toString());
@@ -131,7 +136,7 @@ public class WelcomingScreenActivity extends BaseActivity {
             registerForm.setVisibility(View.VISIBLE);
             return;
         }
-        SharedPreferenceUtil.putString(sharedpreferences, "request_key", response.getMessage());
+        SharedPreferenceUtil.putRequestKey(sharedpreferences, response.getMessage());
         SharedPreferenceUtil.putSessionData(sharedpreferences, response);
         goToHomePage();
     }

@@ -159,6 +159,14 @@ public class SharedPreferenceUtil {
 
     }
 
+    public static void putRequestKey(SharedPreferences sharedPreferences, String requestKey){
+        putString(sharedPreferences, "request_key", requestKey);
+    }
+
+    public static String getRequestKey(SharedPreferences sharedPreferences){
+        return getValue(sharedPreferences, "request_key");
+    }
+
     public static void putSessionData(SharedPreferences sharedpreferences, WebResponse response) {
 
         putObject(sharedpreferences, "session_data", response);

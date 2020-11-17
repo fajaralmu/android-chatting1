@@ -1,6 +1,7 @@
 package com.fajar.android.chatting1.activities.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     protected SharedPreferences sharedpreferences;
 
     private TextView accountName, accountId, accountRegisteredDate;
+    private Button buttonInvalidate;
 
     public HomeFragment() {
         setHandler(HomeFragmentHandler.getInstance(this));
@@ -48,22 +50,58 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @Override
+    public void startLoading() {
+        buttonInvalidate.setVisibility(View.GONE);
+        super.startLoading();
+    }
+
+    @Override
+    public void stopLoading() {
+        buttonInvalidate.setVisibility(View.VISIBLE);
+        super.stopLoading();
+    }
 
     private void initComponents() {
         accountId = findById(R.id.account_id);
         accountName = findById(R.id.account_name);
         accountRegisteredDate = findById(R.id.account_date);
+        buttonInvalidate = findById(R.id.button_invalidate);
+        loader = findById(R.id.loader_home);
     }
 
     private void initEvents() {
         Logs.log("Home Fragment initEvents");
 
+        buttonInvalidate.setOnClickListener(this::invalidate);
+        
         if (SharedPreferenceUtil.getValue(sharedpreferences, "session_data").isEmpty() == false) {
             WebResponse sessionData = SharedPreferenceUtil.getSessionData(sharedpreferences);
             populateSessionData(sessionData);
         } else {
-            Navigate.navigate(getActivity(), WelcomingScreenActivity.class);
+           goToWelcomingScreen();
         }
+    }
+    
+    private void invalidate(View v){
+        AlertUtil.confirm(getActivity(), "Invalidate Session?",  this::invalidateConfirmed);
+    }
+
+    private void invalidateConfirmed(DialogInterface dialogInterface, int i) {
+        String requestKey = SharedPreferenceUtil.getRequestKey(sharedpreferences);
+        handler.invalidate(requestKey, this::handleInvalidate);
+    }
+
+    private void handleInvalidate(WebResponse response, Exception e) {
+        if(e != null){
+            AlertUtil.YesAlert(getActivity(), "Error Invalidate", e.getMessage());
+        }
+
+        goToWelcomingScreen();
+    }
+
+    private void goToWelcomingScreen() {
+        Navigate.navigate(getActivity(), WelcomingScreenActivity.class);
     }
 
     private void populateSessionData(WebResponse sessionData) {
