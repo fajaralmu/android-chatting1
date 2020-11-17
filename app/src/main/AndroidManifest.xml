@@ -5,9 +5,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/kiis_stroke"
+        android:icon="@drawable/nc"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/kiis_stroke"
+        android:roundIcon="@drawable/nc"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:vmSafeMode="true"

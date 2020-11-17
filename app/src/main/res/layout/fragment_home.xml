@@ -7,97 +7,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.fajar.android.chatting1.activities.fragments.BaseFragment">
+    tools:context="com.fajar.android.chatting1.activities.fragments.HomeFragment">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/textView17"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:text="Welcome"
-                android:textColor="@android:color/background_dark"
-                android:textSize="30sp" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_person_black_24dp" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="4"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_person_black_24dp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/account_name"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="4"
-                        android:orientation="vertical">
+                        android:text="Name" />
 
-                        <TextView
-                            android:id="@+id/account_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Name" />
+                    <TextView
+                        android:id="@+id/account_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Account Id" />
 
-                        <TextView
-                            android:id="@+id/account_id"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Account Id" />
-
-                        <TextView
-                            android:id="@+id/account_date"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Registered Date" />
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/account_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Registered Date" />
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-            <ProgressBar
-                android:id="@+id/loader_home"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
+        <Button
+            android:id="@+id/button_invalidate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/holo_red_dark"
+            android:text="Invalidate"
+            android:textColor="@android:color/background_light"
+            android:textSize="10sp" />
 
-            <Button
-                android:id="@+id/button_invalidate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/holo_red_dark"
-                android:text="Invalidate"
-                android:textColor="@android:color/background_light"
-                android:textSize="10sp" />
+        <ProgressBar
+            android:id="@+id/loader_home_fragment"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" />
 
-        </LinearLayout>
+    </LinearLayout>
 
-
-    </ScrollView>
 </LinearLayout>

@@ -50,55 +50,56 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
-    public void startLoading() {
-        buttonInvalidate.setVisibility(View.GONE);
-        super.startLoading();
-    }
-
-    @Override
-    public void stopLoading() {
-        buttonInvalidate.setVisibility(View.VISIBLE);
-        super.stopLoading();
-    }
-
     private void initComponents() {
         accountId = findById(R.id.account_id);
         accountName = findById(R.id.account_name);
         accountRegisteredDate = findById(R.id.account_date);
         buttonInvalidate = findById(R.id.button_invalidate);
-        loader = findById(R.id.loader_home);
+        loader = findById(R.id.loader_home_fragment);
     }
 
     private void initEvents() {
-        Logs.log("Home Fragment initEvents");
 
+        setLoaderGone();
         buttonInvalidate.setOnClickListener(this::invalidate);
-        
+
         if (SharedPreferenceUtil.getValue(sharedpreferences, "session_data").isEmpty() == false) {
             WebResponse sessionData = SharedPreferenceUtil.getSessionData(sharedpreferences);
             populateSessionData(sessionData);
         } else {
-           goToWelcomingScreen();
+            goToWelcomingScreen();
         }
     }
-    
-    private void invalidate(View v){
-        AlertUtil.confirm(getActivity(), "Invalidate Session?",  this::invalidateConfirmed);
+
+    private void invalidate(View v) {
+        AlertUtil.confirm(getActivity(), "Invalidate Session?", this::invalidateConfirmed);
     }
 
     private void invalidateConfirmed(DialogInterface dialogInterface, int i) {
         String requestKey = SharedPreferenceUtil.getRequestKey(sharedpreferences);
+        buttonInvalidate.setVisibility(View.GONE);
+
         handler.invalidate(requestKey, this::handleInvalidate);
     }
 
     private void handleInvalidate(WebResponse response, Exception e) {
-        if(e != null){
-            AlertUtil.YesAlert(getActivity(), "Error Invalidate", e.getMessage());
-        }
-
-        goToWelcomingScreen();
+        // loader.setVisibility(View.INVISIBLE);
+        String title = e == null ? "Info" : "Error Invalidate";
+        String content = e == null ? "Invalidated" : e.getMessage();
+        AlertUtil.YesAlert(getActivity(), title, content, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                stopLoading();
+                if (e != null) {
+                    buttonInvalidate.setVisibility(View.VISIBLE);
+                } else {
+                    goToWelcomingScreen();
+                }
+            }
+        });
     }
+
+}
 
     private void goToWelcomingScreen() {
         Navigate.navigate(getActivity(), WelcomingScreenActivity.class);

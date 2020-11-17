@@ -109,8 +109,8 @@ public class WelcomingScreenActivity extends BaseActivity {
         }
     }
 
-    private void register(View v){
-        if(inputUsername.getText().toString().isEmpty()){
+    private void register(View v) {
+        if (inputUsername.getText().toString().isEmpty()) {
             AlertUtil.YesAlert(this, "Invalid Username");
             return;
         }
@@ -134,6 +134,7 @@ public class WelcomingScreenActivity extends BaseActivity {
         if (e != null) {
             AlertUtil.YesAlert(this, "Error Registering Account", e.getMessage());
             registerForm.setVisibility(View.VISIBLE);
+            stopLoading();
             return;
         }
         SharedPreferenceUtil.putRequestKey(sharedpreferences, response.getMessage());
@@ -180,7 +181,7 @@ public class WelcomingScreenActivity extends BaseActivity {
 
             @Override
             protected void onPostExecute(WebResponse webResponse) {
-                stopLoading();
+
                 Logs.log("onPostExecute register task");
                 registerCallback(webResponse, exception);
             }

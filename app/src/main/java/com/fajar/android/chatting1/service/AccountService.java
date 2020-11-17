@@ -43,13 +43,13 @@ public class AccountService {
     }
     public WebResponse invalidateUser(String requestKey){
         String endPoint = Endpoints.ENDPOINT_INVALIDATE_USER;
-        System.out.println("call invalidate to: "+endPoint);
+        Logs.log("call invalidate to: "+endPoint);
 
         try {
             ResponseEntity<WebResponse> responseEntity = Commons.getRestTemplate().exchange(endPoint, HttpMethod.POST, Commons.httpEntityWithRequestKey(null, requestKey),
                     WebResponse.class);
             WebResponse response =  responseEntity.getBody();
-            Logs.log("invalidate user: ", response.getRegisteredRequest());
+            Logs.log("invalidated session");
             return response;
         }catch ( Exception ex){
             Logs.log("ERROR invalidate: ", ex);

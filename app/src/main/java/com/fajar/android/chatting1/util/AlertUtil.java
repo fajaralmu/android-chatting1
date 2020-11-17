@@ -5,26 +5,32 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 public class AlertUtil {
-    public static void YesAlert(Context ctx, String content){
-        YesAlert(ctx, "Info", content);
+    public static void YesAlert(Context ctx, String content) {
+        YesAlert(ctx, "Info", content, null);
     }
-    public static void YesAlert(Context ctx, String title, String content){
+
+    public static void YesAlert(Context ctx, String title, String content) {
+        YesAlert(ctx, title, content, null);
+    }
+
+    public static void YesAlert(Context ctx, String title, String content, DialogInterface.OnClickListener yesListener) {
         AlertDialog.Builder a_builder = new AlertDialog.Builder(ctx);
         a_builder.setMessage(content)
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
+                .setPositiveButton("Yes",
+                        yesListener != null ? yesListener : new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
         ;
-        AlertDialog alert  = a_builder.create();
+        AlertDialog alert = a_builder.create();
         alert.setTitle(title);
         alert.show();
     }
 
-    public static void confirm(Context ctx, String message, DialogInterface.OnClickListener yesListener){
+    public static void confirm(Context ctx, String message, DialogInterface.OnClickListener yesListener) {
         new AlertDialog.Builder(ctx)
                 .setTitle("Confirmation")
                 .setMessage(message)

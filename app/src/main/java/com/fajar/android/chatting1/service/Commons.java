@@ -65,8 +65,8 @@ public class Commons {
                 headers.add(entry.getKey(), entry.getValue());
             }
         }
-        headers.add("user-agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+//        headers.add("user-agent",
+//                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
         HttpEntity<T> entity = new HttpEntity<T>( payload,headers);
         return entity;
 

@@ -18,11 +18,11 @@ import com.fajar.android.chatting1.handlers.BaseHandler;
 import com.fajar.android.chatting1.util.Logs;
 
 public class BaseFragment<H extends  BaseHandler> extends Fragment {
+    private static HashMap<Integer, Class> customFragments = initCustomFragments();
 
     protected Integer fragmentId = null;
     protected SharedPreferences sharedpreferences;
-    private static HashMap<Integer, Class> customFragments = initCustomFragments();
-    private String breadCumbLabel = null;
+    protected String breadCumbLabel = null;
     protected View view;
     protected H handler;
     protected ProgressBar loader;
@@ -116,21 +116,24 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
 
     public  void startLoading(){
         if(null == loader){
+            Logs.log("START loader is null");
             return;
         }
+        Logs.log("START LOADER");
         loader.setVisibility(View.VISIBLE);
     }
 
     public void stopLoading(){
-
         setLoaderGone();
     }
 
     protected void setLoaderGone(){
         if(null == loader){
+            Logs.log("STOP loader is null");
             return;
         }
-        loader.setVisibility(View.GONE);
+        Logs.log("STOP LOADER");
+        loader.setVisibility(View.INVISIBLE);
     }
 
     public SharedPreferences getSharedPreferences() {

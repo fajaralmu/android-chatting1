@@ -25,6 +25,7 @@ public class HomeFragmentHandler extends BaseHandler<HomeFragment> {
 
 
     public void invalidate(String requestKey, MyConsumer<WebResponse> callback) {
+        Logs.log("invalidate session: ",requestKey);
         startLoading();
         invalidateTask(callback).execute(requestKey);
     }
@@ -46,7 +47,7 @@ public class HomeFragmentHandler extends BaseHandler<HomeFragment> {
 
             @Override
             protected void onPostExecute(WebResponse webResponse) {
-                stopLoading();
+           //     stopLoading();
                 Logs.log("onPostExecute invalidte task");
                 callback.accept(webResponse, exception);
             }
