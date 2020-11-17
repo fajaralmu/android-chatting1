@@ -51,7 +51,6 @@ public class SearchFragmentHandler extends BaseHandler<SearchFragment> {
 
             @Override
             protected void onPostExecute(WebResponse webResponse) {
-
                 Logs.log("onPostExecute initializeChatTask");
                 callback.accept(webResponse, exception);
             }

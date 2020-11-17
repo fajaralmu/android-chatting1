@@ -86,6 +86,7 @@ public class SearchFragment extends BaseFragment<SearchFragmentHandler> {
             AlertUtil.YesAlert(getActivity(), "Invalid Partner");
             return;
         }
+        loader.setVisibility(View.VISIBLE);
         handler.initializeChat(partnerAccount.getRequestId(), getRequestKey(), new MyConsumer<WebResponse>() {
 
             @Override
