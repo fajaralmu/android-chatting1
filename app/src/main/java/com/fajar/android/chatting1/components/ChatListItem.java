@@ -93,7 +93,9 @@ public class ChatListItem extends LinearLayout {
 //        }
 
         setTitle(partnerAccount.getUsername());
-        setNewsDate(partnerAccount.getCreated() == null? new Date().toString():partnerAccount.getCreated().toString());
+        setNewsDate(partnerAccount.getCreated() == null?
+                "+"+new Date():
+                partnerAccount.getCreated().toString());
     }
 
     public void loadImage() {

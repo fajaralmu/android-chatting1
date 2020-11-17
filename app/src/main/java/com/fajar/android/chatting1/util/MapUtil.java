@@ -1,6 +1,7 @@
 package com.fajar.android.chatting1.util;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -71,6 +72,12 @@ public class MapUtil {
                                      */
                                         if (fieldType.equals(Date.class) && (objectEquals(value.getClass(), Long.class, long.class))) {
                                             value = new Date((Long) value);
+                                        } else
+                                        if (fieldType.equals(Date.class) && (objectEquals(value.getClass(), String.class))) {
+                                            //String date = "17-11-2020 01:01:19";
+                                            String pattern = "dd-MM-yyyy HH:mm:ss";
+                                            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+                                            value =  sdf.parse(String.valueOf(value));
                                         } else
                                         /**
                                          * long from date
