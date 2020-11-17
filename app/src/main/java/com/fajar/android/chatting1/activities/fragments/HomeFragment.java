@@ -79,7 +79,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     private void invalidateConfirmed(DialogInterface dialogInterface, int i) {
         String requestKey = SharedPreferenceUtil.getRequestKey(sharedpreferences);
         buttonInvalidate.setVisibility(View.GONE);
-
+        loader.setVisibility(View.VISIBLE);
         handler.invalidate(requestKey, this::handleInvalidate);
     }
 
