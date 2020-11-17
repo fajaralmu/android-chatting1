@@ -16,15 +16,15 @@
             android:id="@+id/loader_chatting_list"
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="50dp" />
 
         <ImageButton
             android:id="@+id/button_load_chatting_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:background="@null"
             android:src="@android:drawable/ic_popup_sync"
-            android:tint="@android:color/black" />
+            android:tint="@android:color/background_dark" />
     </LinearLayout>
 
     <ScrollView

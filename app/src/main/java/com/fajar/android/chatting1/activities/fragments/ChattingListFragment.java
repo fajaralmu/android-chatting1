@@ -22,6 +22,7 @@ import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.ChattingListFragmentHandler;
+import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.RegisteredRequest;
@@ -65,6 +66,15 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
         setLoaderGone();
         chattingListLayout.removeAllViews();
         buttonLoadChattingList.setOnClickListener(loadChattingPartnerListener());
+        
+        checkChattingPartners();
+    }
+
+    private void checkChattingPartners() {
+        WebResponse chattingPartnersData = SharedPreferenceUtil.getChattingPartnersData(sharedpreferences);
+        if(null != chattingPartnersData){
+            populateChattingPartners(chattingPartnersData);
+        }
     }
 
     private void getChattingPartners(){
@@ -88,8 +98,6 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
                 buttonLoadChattingList.setVisibility(View.GONE);
                 getChattingPartners();
             }
-
-
         };
     }
 
@@ -99,6 +107,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
             showInfoEmpty();
             return;
         }
+        SharedPreferenceUtil.putChattingPartnersData(sharedpreferences, response);
         List partners = response.getResultList();
         for (Object partner :
                 partners) {
