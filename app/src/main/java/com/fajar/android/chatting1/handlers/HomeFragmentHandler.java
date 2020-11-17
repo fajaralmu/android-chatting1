@@ -21,32 +21,7 @@ public class HomeFragmentHandler extends BaseHandler {
         return instance;
     }
 
-    public void register(String username, MyConsumer<WebResponse> callback){
-        fragment.startLoading();
-        registerTask(callback).execute(username);
 
-    }
 
-    private AsyncTask<String, Void, WebResponse> registerTask(final MyConsumer<WebResponse> callback){
-        return new AsyncTask<String, Void, WebResponse>() {
 
-            private Exception exception;
-            @Override
-            protected WebResponse doInBackground(String... strings) {
-                try {
-                    return AccountService.instance().register(strings[0]);
-                } catch (Exception e){
-                    this.exception = e;
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(WebResponse webResponse) {
-                fragment.stopLoading();
-                Logs.log("onPostExecute register task");
-                callback.accept(webResponse, exception);
-            }
-        };
-    }
 }

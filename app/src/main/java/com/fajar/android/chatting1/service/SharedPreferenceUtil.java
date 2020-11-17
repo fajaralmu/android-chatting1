@@ -2,6 +2,7 @@ package com.fajar.android.chatting1.service;
 
 import android.content.SharedPreferences;
 
+import com.fajar.livestreaming.dto.WebResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -156,5 +157,14 @@ public class SharedPreferenceUtil {
             Logs.log("end Put key: ", key);
         });
 
+    }
+
+    public static void putSessionData(SharedPreferences sharedpreferences, WebResponse response) {
+
+        putObject(sharedpreferences, "session_data", response);
+    }
+
+    public static WebResponse getSessionData(SharedPreferences sharedPreferences){
+        return getObject(sharedPreferences, "session_data", WebResponse.class);
     }
 }

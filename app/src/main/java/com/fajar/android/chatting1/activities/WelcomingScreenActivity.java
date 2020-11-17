@@ -4,12 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import java.io.Serializable;
 
 import com.fajar.android.chatting1.constants.Extras;
+import com.fajar.android.chatting1.handlers.MyConsumer;
 import com.fajar.android.chatting1.service.AccountService;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
+import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.android.chatting1.util.Navigate;
 import com.fajar.android.chatting1.R;
@@ -17,6 +23,9 @@ import com.fajar.livestreaming.dto.WebResponse;
 
 public class WelcomingScreenActivity extends BaseActivity {
 
+    private LinearLayout registerForm;
+    private EditText inputUsername;
+    private Button buttonRegister;
 
     public WelcomingScreenActivity() {
         super(R.layout.activity_splash_screen);
@@ -26,7 +35,7 @@ public class WelcomingScreenActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkIntentExras();
-        checkUser();
+        new ShowSplashTask().execute(this);
     }
 
 
@@ -48,12 +57,16 @@ public class WelcomingScreenActivity extends BaseActivity {
 
     @Override
     protected void initComponent() {
-
+        loader = findViewById(R.id.splash_loader);
+        registerForm = findViewById(R.id.register_form);
+        buttonRegister = findViewById(R.id.button_register);
+        inputUsername = findViewById(R.id.input_name_register);
     }
 
     @Override
     protected void initEvent() {
-
+        registerForm.setVisibility(View.GONE);
+        buttonRegister.setOnClickListener(this::register);
     }
 
     @Override
@@ -73,31 +86,53 @@ public class WelcomingScreenActivity extends BaseActivity {
 
     private void goToHomePage() {
         Navigate.navigate(this, HomeActivity.class);
-//        new GoHome().execute(this);
     }
 
 
-    private class GoHome extends AsyncTask<Context, String, String> {
+    private class ShowSplashTask extends AsyncTask<Context, String, String> {
 
         @Override
         protected String doInBackground(Context... contexts) {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Navigate.navigate(contexts[0], HomeActivity.class);
+
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            checkUser();
         }
     }
 
-    private void handleGetUser(WebResponse response) {
+    private void register(View v){
+        startLoading();
+        registerForm.setVisibility(View.GONE);
+        registerTask().execute(inputUsername.getText().toString());
+    }
+
+    private void getUserCallback(WebResponse response) {
         if (null == response) {
-            goToHomePage();
+            AlertUtil.YesAlert(this, "Please Register Your Account");
+            registerForm.setVisibility(View.VISIBLE);
             return;
         }
 
-        SharedPreferenceUtil.putObject(sharedpreferences, "session_data", response);
+        SharedPreferenceUtil.putSessionData(sharedpreferences, response);
+        goToHomePage();
+    }
+
+    private void registerCallback(WebResponse response, Exception e) {
+        if (e != null) {
+            AlertUtil.YesAlert(this, "Error Registering Account", e.getMessage());
+            registerForm.setVisibility(View.VISIBLE);
+            return;
+        }
+        SharedPreferenceUtil.putString(sharedpreferences, "request_key", response.getMessage());
+        SharedPreferenceUtil.putSessionData(sharedpreferences, response);
         goToHomePage();
     }
 
@@ -117,7 +152,32 @@ public class WelcomingScreenActivity extends BaseActivity {
 
             @Override
             protected void onPostExecute(WebResponse response) {
-                handleGetUser(response);
+                stopLoading();
+                getUserCallback(response);
+            }
+        };
+    }
+
+    private AsyncTask<String, Void, WebResponse> registerTask() {
+        return new AsyncTask<String, Void, WebResponse>() {
+
+            private Exception exception;
+
+            @Override
+            protected WebResponse doInBackground(String... strings) {
+                try {
+                    return AccountService.instance().register(strings[0]);
+                } catch (Exception e) {
+                    this.exception = e;
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(WebResponse webResponse) {
+                stopLoading();
+                Logs.log("onPostExecute register task");
+                registerCallback(webResponse, exception);
             }
         };
     }

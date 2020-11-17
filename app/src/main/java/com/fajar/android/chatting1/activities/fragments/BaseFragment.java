@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
+import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.BaseHandler;
 import com.fajar.android.chatting1.util.Logs;
 
@@ -130,6 +131,10 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
             return;
         }
         loader.setVisibility(View.GONE);
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return getActivity().getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, Context.MODE_PRIVATE);
     }
 }
 

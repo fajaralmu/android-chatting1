@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.util.Logs;
@@ -14,7 +15,7 @@ import com.fajar.android.chatting1.util.Navigate;
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected final int LAYOUT_ID;
-
+    protected ProgressBar loader;
     protected SharedPreferences sharedpreferences;
     public BaseActivity(int layoutId){
         LAYOUT_ID = layoutId;
@@ -52,7 +53,24 @@ public abstract class BaseActivity extends AppCompatActivity {
         };
     }
 
+    public  void startLoading(){
+        if(null == loader){
+            return;
+        }
+        loader.setVisibility(View.VISIBLE);
+    }
 
+    public void stopLoading(){
+
+        setLoaderGone();
+    }
+
+    protected void setLoaderGone(){
+        if(null == loader){
+            return;
+        }
+        loader.setVisibility(View.GONE);
+    }
     protected abstract void initComponent();
     protected abstract void initEvent();
 }

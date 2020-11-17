@@ -10,35 +10,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.fajar.android.chatting1.R;
+import com.fajar.android.chatting1.activities.WelcomingScreenActivity;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.HomeFragmentHandler;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
+import com.fajar.android.chatting1.util.Navigate;
+import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 
-public class HomeFragment extends BaseFragment<HomeFragmentHandler>{
+public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     protected SharedPreferences sharedpreferences;
 
+    private TextView accountName, accountId, accountRegisteredDate;
 
-    private Button buttonRegister;
-    private EditText inputUsername;
-
-    public HomeFragment(){
+    public HomeFragment() {
         setHandler(HomeFragmentHandler.getInstance(this));
-        Logs.log("Catalog Fragment Created");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        sharedpreferences = getActivity().getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, Context.MODE_PRIVATE);
+        sharedpreferences = super.getSharedPreferences();
         initComponents();
         initEvents();
-        Logs.log("Catalog Fragment onCreateView");
         return view;
     }
 
@@ -50,30 +50,28 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler>{
 
 
     private void initComponents() {
-        buttonRegister = findById(R.id.btn_register);
-        inputUsername = findById(R.id.input_username);
-        loader = findById(R.id.home_loader);
+        accountId = findById(R.id.account_id);
+        accountName = findById(R.id.account_name);
+        accountRegisteredDate = findById(R.id.account_date);
     }
-    private void initEvents(){
-        buttonRegister.setOnClickListener(this::register);
-        setLoaderGone();
+
+    private void initEvents() {
         Logs.log("Home Fragment initEvents");
 
-        if(SharedPreferenceUtil.getValue(sharedpreferences, "session_data").isEmpty() == false){
-            WebResponse sessionData = SharedPreferenceUtil.getObject(sharedpreferences, "session_data", WebResponse.class);
-            inputUsername.setText(sessionData.getRegisteredRequest().getUsername());
+        if (SharedPreferenceUtil.getValue(sharedpreferences, "session_data").isEmpty() == false) {
+            WebResponse sessionData = SharedPreferenceUtil.getSessionData(sharedpreferences);
+            populateSessionData(sessionData);
+        } else {
+            Navigate.navigate(getActivity(), WelcomingScreenActivity.class);
         }
     }
 
-    private void register(View v){
-        String username = inputUsername.getText().toString();
-        handler.register(username, this::handleRegisterResponse);
+    private void populateSessionData(WebResponse sessionData) {
+        RegisteredRequest account = sessionData.getRegisteredRequest();
+        accountName.setText(account.getUsername());
+        accountId.setText(account.getRequestId());
+        accountRegisteredDate.setText(account.getCreated().toString());
     }
 
-    public void handleRegisterResponse(WebResponse response, Exception error){
-        if(null == error){
-            AlertUtil.YesAlert(view.getContext(), "SUCCESS: "+response.getMessage());
-            SharedPreferenceUtil.putString(sharedpreferences, "request_key", response.getMessage());
-        }
-    }
+
 }
