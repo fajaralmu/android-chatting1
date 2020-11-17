@@ -122,6 +122,7 @@ public class WelcomingScreenActivity extends BaseActivity {
     private void getUserCallback(WebResponse response) {
         if (null == response) {
             AlertUtil.YesAlert(this, "Please Register Your Account");
+            stopLoading();
             registerForm.setVisibility(View.VISIBLE);
             return;
         }
@@ -158,7 +159,7 @@ public class WelcomingScreenActivity extends BaseActivity {
 
             @Override
             protected void onPostExecute(WebResponse response) {
-                stopLoading();
+
                 getUserCallback(response);
             }
         };

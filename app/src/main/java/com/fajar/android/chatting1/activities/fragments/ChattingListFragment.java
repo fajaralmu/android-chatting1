@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,7 +32,7 @@ import java.util.List;
 public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandler> {
 
     private LinearLayout chattingListLayout;
-    private Button buttonLoadChattingList;
+    private ImageButton buttonLoadChattingList;
 
     public ChattingListFragment() {
 
@@ -54,7 +56,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     }
 
     private void initComponents() {
-        chattingListLayout = (LinearLayout) findById(R.id.chat_list_layout);
+        chattingListLayout =  findById(R.id.chat_list_layout);
         buttonLoadChattingList = findById(R.id.button_load_chatting_list);
         loader = findById(R.id.loader_chatting_list);
     }
@@ -65,24 +67,29 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
         buttonLoadChattingList.setOnClickListener(loadChattingPartnerListener());
     }
 
+    private void getChattingPartners(){
+        handler.getChattingPartners(getRequestKey(), this::handleChattingPartners);
+    }
+    private void handleChattingPartners(WebResponse response, Exception e) {
+        stopLoading();
+        buttonLoadChattingList.setVisibility(View.VISIBLE);
+        if (e != null) {
+            AlertUtil.ErrorAlert(getActivity(), e);
+            return;
+        }
+
+        populateChattingPartners(response);
+
+    }
     private View.OnClickListener loadChattingPartnerListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buttonLoadChattingList.setVisibility(View.GONE);
-                handler.getChattingPartners(getRequestKey(), this::handleChattingPartners);
+                getChattingPartners();
             }
 
-            private void handleChattingPartners(WebResponse response, Exception e) {
-                buttonLoadChattingList.setVisibility(View.VISIBLE);
-                if (e != null) {
-                    AlertUtil.ErrorAlert(getActivity(), e);
-                    return;
-                }
 
-                populateChattingPartners(response);
-
-            }
         };
     }
 

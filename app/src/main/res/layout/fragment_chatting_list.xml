@@ -18,12 +18,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_load_chatting_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/holo_green_light"
-            android:text="Load Chatting List" />
+            android:background="@null"
+            android:src="@android:drawable/ic_popup_sync"
+            android:tint="@android:color/black" />
     </LinearLayout>
 
     <ScrollView

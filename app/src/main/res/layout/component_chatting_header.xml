@@ -10,14 +10,26 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="29dp"
+        android:layout_height="50dp"
         android:background="@android:color/holo_blue_dark"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="5dp">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:src ="@drawable/nc" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Chatting"
-            android:textColor="#ffffff" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Nuswantoro.conf"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
     </LinearLayout>
 </LinearLayout>

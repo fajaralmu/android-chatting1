@@ -134,7 +134,7 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
             return;
         }
         Logs.log("STOP LOADER");
-        loader.setVisibility(View.INVISIBLE);
+        loader.setVisibility(View.GONE);
     }
 
     public SharedPreferences getSharedPreferences() {
