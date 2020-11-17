@@ -64,13 +64,6 @@
                         android:layout_height="wrap_content"
                         android:text="Registered Date" />
 
-                    <TextView
-                        android:id="@+id/account_user_agent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textMultiLine"
-                        android:text="user agent"
-                        android:textSize="10sp" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
