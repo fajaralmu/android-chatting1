@@ -81,6 +81,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
 
     private void getChattingPartners(){
         loader.setVisibility(View.VISIBLE);
+        chattingListLayout.removeAllViews();
         handler.getChattingPartners(getRequestKey(), this::handleChattingPartners);
     }
     private void handleChattingPartners(WebResponse response, Exception e) {

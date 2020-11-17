@@ -47,6 +47,20 @@ public class ChattingService {
             throw ex;
         }
     }
+    public WebResponse getChattingMessages(String partnerId, String requestKey){
+        String endPoint = Endpoints.ENDPOINT_GET_CHATTING_MESSAGES+partnerId;
+
+        try {
+            ResponseEntity<WebResponse> responseEntity = Commons.getRestTemplate().exchange(endPoint, HttpMethod.POST, Commons.httpEntityWithRequestKey(null, requestKey),
+                    WebResponse.class);
+            WebResponse response =  responseEntity.getBody();
+            Logs.log("SUCCESS getChattingMessages");
+            return response;
+        }catch ( Exception ex){
+            Logs.log("ERROR getChattingMessages: ", ex);
+            throw ex;
+        }
+    }
 
     public WebResponse getChattingPartners(String requestKey) {
         String endPoint = Endpoints.ENDPOINT_GET_CHATTING_PARTNERS;

@@ -25,7 +25,6 @@ import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 
 public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
-    protected SharedPreferences sharedpreferences;
 
     private TextView accountName, accountId, accountRegisteredDate;
     private Button buttonInvalidate;
@@ -38,7 +37,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        sharedpreferences = super.getSharedPreferences();
+        setSharedpreferences();
         initComponents();
         initEvents();
         return view;

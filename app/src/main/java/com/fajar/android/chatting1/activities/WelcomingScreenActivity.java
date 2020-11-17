@@ -67,6 +67,8 @@ public class WelcomingScreenActivity extends BaseActivity {
     protected void initEvent() {
         registerForm.setVisibility(View.GONE);
         buttonRegister.setOnClickListener(this::register);
+
+        inputUsername.setText(android.os.Build.MODEL);
     }
 
     @Override

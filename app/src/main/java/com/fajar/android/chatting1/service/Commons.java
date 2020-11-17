@@ -1,5 +1,6 @@
 package com.fajar.android.chatting1.service;
 
+import com.fajar.android.chatting1.util.Logs;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -48,6 +49,7 @@ public class Commons {
     }
 
     public static <T> HttpEntity<T> httpEntityWithRequestKey(T payload, String requestKey){
+        Logs.log("--------------- requestKey: ", requestKey);
         Map<String , String> map = new HashMap<>();
         map.put("request_key", requestKey);
         return httpEntity(payload,map);

@@ -107,6 +107,7 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
         customFragments.put(R.layout.fragment_chatting_list, ChattingListFragment.class);
         customFragments.put(R.layout.fragment_home, HomeFragment.class);
         customFragments.put(R.layout.fragment_search, SearchFragment.class);
+        customFragments.put(R.layout.fragment_chat_room, ChatRoomFragment.class);
 
         return customFragments;
     }

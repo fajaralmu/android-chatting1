@@ -34,9 +34,9 @@ public class ChatListItem extends LinearLayout {
     public ChatListItem(Context context, @Nullable AttributeSet attrs, boolean loadImage, Activity parentActivity) {
         super(context, attrs);
         this.loadImage = loadImage;
-        if (parentActivity instanceof HomeActivity){
+        if (parentActivity instanceof HomeActivity) {
             this.parentActivity = (HomeActivity) parentActivity;
-        }else {
+        } else {
             this.parentActivity = null;
         }
         init(context, attrs);
@@ -45,9 +45,9 @@ public class ChatListItem extends LinearLayout {
     public ChatListItem(RegisteredRequest partnerAccount, boolean loadImage, Activity parentActivity) {
         super(parentActivity);
         this.loadImage = loadImage;
-        if (parentActivity instanceof HomeActivity){
+        if (parentActivity instanceof HomeActivity) {
             this.parentActivity = (HomeActivity) parentActivity;
-        }else {
+        } else {
             this.parentActivity = null;
         }
         init(parentActivity, null);
@@ -93,13 +93,13 @@ public class ChatListItem extends LinearLayout {
 //        }
 
         setTitle(partnerAccount.getUsername());
-        setNewsDate(partnerAccount.getCreated() == null?
-                "+"+new Date():
+        setNewsDate(partnerAccount.getCreated() == null ?
+                "+" + new Date() :
                 partnerAccount.getCreated().toString());
     }
 
     public void loadImage() {
-        if (null == partnerAccount){// || null == partnerAccount.getImages()) {
+        if (null == partnerAccount) {// || null == partnerAccount.getImages()) {
             return;
         }
         return;
@@ -118,8 +118,9 @@ public class ChatListItem extends LinearLayout {
         return new ImageViewWithURL.HandleBitmapResult() {
             @Override
             public void handleBitmap(Bitmap bitmap) {
-                if (null != parentActivity){}
-                 //   parentActivity.addPostBitmap(partnerAccount.getId(), bitmap);
+                if (null != parentActivity) {
+                }
+                //   parentActivity.addPostBitmap(partnerAccount.getId(), bitmap);
             }
         };
     }
@@ -143,29 +144,24 @@ public class ChatListItem extends LinearLayout {
     }
 
     private void initEvents() {
-        buttonNewsLink.setOnClickListener(showPopupMenu());
+        buttonNewsLink.setOnClickListener(this::showPopupMenu);
         imageThumbnail.setImageResource(android.R.drawable.ic_menu_camera);
     }
 
-    private OnClickListener showPopupMenu() {
+    private void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(getContext(), view);
+        popupMenu.setOnMenuItemClickListener(popupMenuOnClick());
+        popupMenu.inflate(R.menu.chat_item_popup_menu);
+        popupMenu.show();
 
-        return new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu popupMenu = new PopupMenu(getContext(), view);
-                popupMenu.setOnMenuItemClickListener(popupMenuOnClick());
-                popupMenu.inflate(R.menu.news_item_popup_menu);
-                popupMenu.show();
-            }
-
-        };
     }
 
-    private void openLink() {
+    private void enterChatRoom() {
         if (null == partnerAccount) {
             return;
         }
-       // Navigate.openLink(partnerAccount.newsLink(), getContext());
+        parentActivity.enterChatRoom();
+        // Navigate.openLink(partnerAccount.newsLink(), getContext());
     }
 
     private PopupMenu.OnMenuItemClickListener popupMenuOnClick() {
@@ -173,11 +169,11 @@ public class ChatListItem extends LinearLayout {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.menu_news_item_open_link:
-                        openLink();
+                    case R.id.menu_chat_item_enter_room:
+                        enterChatRoom();
                         break;
-                    case R.id.menu_news_item_share:
-                        shareLink();
+                    default:
+
                         break;
 
                 }
@@ -188,7 +184,7 @@ public class ChatListItem extends LinearLayout {
     }
 
     private void shareLink() {
-       // Navigate.shareText(this.getContext(), partnerAccount.getTitle() + " kunjungi link:" + partnerAccount.newsLink());
+        // Navigate.shareText(this.getContext(), partnerAccount.getTitle() + " kunjungi link:" + partnerAccount.newsLink());
     }
 
     public boolean isLoadImage() {

@@ -102,6 +102,7 @@ public class HomeActivity extends FragmentActivity {
 
                         break;
                     case R.id.navigation_chatting_list:
+                        setInsideCatalogPage(true);
                         switchFragment(R.layout.fragment_chatting_list, "Chatting List");
                         break;
 
@@ -199,5 +200,9 @@ public class HomeActivity extends FragmentActivity {
 
     public boolean isInsideCatalogPage() {
         return insideCatalogPage;
+    }
+
+    public void enterChatRoom() {
+        switchFragment(R.layout.fragment_chat_room, "Chatroom");
     }
 }
