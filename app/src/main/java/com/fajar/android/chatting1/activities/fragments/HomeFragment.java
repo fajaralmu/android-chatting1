@@ -83,7 +83,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     }
 
     private void handleInvalidate(WebResponse response, Exception e) {
-        // loader.setVisibility(View.INVISIBLE);
         String title = e == null ? "Info" : "Error Invalidate";
         String content = e == null ? "Invalidated" : e.getMessage();
         AlertUtil.YesAlert(getActivity(), title, content, new DialogInterface.OnClickListener() {
@@ -98,8 +97,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
             }
         });
     }
-
-}
+ 
 
     private void goToWelcomingScreen() {
         Navigate.navigate(getActivity(), WelcomingScreenActivity.class);
