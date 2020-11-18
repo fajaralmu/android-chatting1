@@ -8,12 +8,14 @@
     android:padding="2dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/message_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
-        android:layout_marginTop="1dp">
+        android:layout_marginTop="1dp"
+        app:cardBackgroundColor="@android:color/background_light">
 
         <LinearLayout
             android:id="@+id/linearLayout3"

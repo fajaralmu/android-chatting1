@@ -30,6 +30,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
     private ScrollView scrollView;
 
     private RegisteredRequest partner;
+    private RegisteredRequest myAccount;
 
     public ChatRoomFragment() {
         setHandler(ChatRoomFragmentHandler.getInstance(this));
@@ -75,7 +76,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         List messages = response.getResultList();
         for (Object message :
                 messages) {
-            ChatMessageItem chatMessageItem = new ChatMessageItem((Message) message, getActivity());
+            ChatMessageItem chatMessageItem = new ChatMessageItem((Message) message, getActivity(), myAccount, partner);
             messagesLayout.addView(chatMessageItem);
         }
         scrollToDowm();
@@ -87,6 +88,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         inputMessage = findById(R.id.chat_room_message_input);
         buttonSendMessage = findById(R.id.button_send_message);
         scrollView = findById(R.id.chat_room_scroll);
+        myAccount = SharedPreferenceUtil.getSessionData(sharedpreferences).getRegisteredRequest();
     }
 
     private void initEvents() {
@@ -112,7 +114,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
             return;
         }
         inputMessage.setText("");
-        ChatMessageItem chatMessageItem = new ChatMessageItem(response.getChatMessage(), getActivity());
+        ChatMessageItem chatMessageItem = new ChatMessageItem(response.getChatMessage(), getActivity(), myAccount, partner);
         messagesLayout.addView(chatMessageItem);
         scrollToDowm();
     }
