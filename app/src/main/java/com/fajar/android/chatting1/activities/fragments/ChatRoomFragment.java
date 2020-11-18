@@ -114,6 +114,15 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
             return;
         }
         inputMessage.setText("");
+        appendNewChatMessage(response);
+    }
+
+    public String getPartnerRequestId(){
+        return partner.getRequestId();
+    }
+
+    public void appendNewChatMessage(WebResponse response){
+
         ChatMessageItem chatMessageItem = new ChatMessageItem(response.getChatMessage(), getActivity(), myAccount, partner);
         messagesLayout.addView(chatMessageItem);
         scrollToDowm();

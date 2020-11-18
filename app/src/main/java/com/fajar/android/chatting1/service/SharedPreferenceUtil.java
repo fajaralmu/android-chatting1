@@ -78,7 +78,7 @@ public class SharedPreferenceUtil {
      * @param value
      */
     public  static void putString(SharedPreferences sharedPreferences, String key, String value){
-        ThreadUtil.runAndStart(() -> {
+       // ThreadUtil.runAndStart(() -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (null == key) {//|| key.isEmpty()) {
                 editor.remove(key);
@@ -89,7 +89,7 @@ public class SharedPreferenceUtil {
             editor.commit();
 
             Logs.log("end Put key: ", key);
-        });
+      //  });
 
     }
 
