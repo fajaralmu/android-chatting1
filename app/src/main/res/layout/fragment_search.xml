@@ -16,53 +16,67 @@
         android:layout_marginTop="5dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Search Partner By ID"
-            android:textSize="15sp" />
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="2dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/holo_blue_dark"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/search_partner_id"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="@android:color/background_light"
-                android:ems="10"
-                android:inputType="textPersonName" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="Search Partner By ID"
+                    android:textSize="15sp" />
 
-            <ImageButton
-                android:id="@+id/button_search_partner"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:background="@android:color/holo_blue_dark"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:src="@android:drawable/ic_menu_search"
-                android:tint="@android:color/background_light" />
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="10dp">
+
+                    <EditText
+                        android:id="@+id/search_partner_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="textPersonName" />
+
+                    <ImageButton
+                        android:id="@+id/button_search_partner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp"
+                        android:src="@android:drawable/ic_menu_search"
+                        android:tint="@android:color/background_dark" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_partner_result"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp">
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -76,7 +90,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_weight="1"
-                    android:src ="@drawable/ic_person_black_24dp" />
+                    android:src="@drawable/ic_person_black_24dp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -108,9 +122,9 @@
                         android:id="@+id/button_initialize_chat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/holo_blue_dark"
+                        android:background="@null"
                         android:src="@android:drawable/sym_action_chat"
-                        android:tint="@android:color/background_light" />
+                        android:tint="@android:color/background_dark" />
 
                 </LinearLayout>
             </LinearLayout>
