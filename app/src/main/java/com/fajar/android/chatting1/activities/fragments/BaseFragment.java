@@ -81,6 +81,13 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
     public static BaseFragment newInstance(int fragmentId, Class<?> _class){
         return newInstance(fragmentId, _class, null, null);
     }
+
+
+
+    public void doByAction(Actions action){
+
+    }
+
     public static BaseFragment newInstance(int fragmentId, Class<?> _class, String breadCumbLabel, Actions initialAction) {
         if (_class == null && customFragments.get(fragmentId) != null) {
             _class = customFragments.get(fragmentId);

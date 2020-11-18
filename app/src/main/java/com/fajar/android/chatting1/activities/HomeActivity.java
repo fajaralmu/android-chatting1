@@ -21,6 +21,7 @@ import java.util.Map;
 
 import com.fajar.android.chatting1.activities.fragments.BaseFragment;
 import com.fajar.android.chatting1.activities.fragments.ChatRoomFragment;
+import com.fajar.android.chatting1.activities.fragments.ChattingListFragment;
 import com.fajar.android.chatting1.constants.Actions;
 import com.fajar.android.chatting1.constants.Extras;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
@@ -119,12 +120,18 @@ public class HomeActivity extends FragmentActivity {
                         switchFragment(R.layout.fragment_search, "Search");
                         break;
                 }
-
-                setInsideCatalogPage(false);
+                setDefaultValues();
                 return false;
             }
         };
     }
+
+    private void setDefaultValues() {
+
+        setInsideCatalogPage(false);
+        setNextAction(Actions.NONE);
+    }
+
 
     private void switchChattingListPage() {
         switchFragment(R.layout.fragment_chatting_list, "Chatting List");
@@ -251,6 +258,14 @@ public class HomeActivity extends FragmentActivity {
         }
 
         if (isPartnerExist(response.getChatMessage().getRequestId()) == false) {
+
+            if(currentFragment instanceof ChattingListFragment){
+                runOnUiThread(()->{
+                    ((ChattingListFragment) currentFragment).doByAction(Actions.RELOAD);
+                });
+                return;
+            }
+
             Logs.log("WILL NOTIFY USER..........");
             runOnUiThread(()-> {
                 setNextAction(Actions.RELOAD);

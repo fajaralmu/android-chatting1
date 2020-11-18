@@ -75,11 +75,17 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     }
 
     private boolean checkInitialAction() {
+        doByAction(getInitialAction());
+        return false;
+    }
+
+    @Override
+    public void doByAction(Actions action) {
+        Logs.log("Chatting List Fragment doByAction: ", action);
         if(getInitialAction().equals(Actions.RELOAD)){
             AlertUtil.YesAlert(getActivity(), "Info", "You have new chatting partner.. Please Reload");
-           // return true;
+            // return true;
         }
-        return false;
     }
 
     private void checkChattingPartners() {
