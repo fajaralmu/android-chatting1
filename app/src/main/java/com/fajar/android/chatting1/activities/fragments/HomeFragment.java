@@ -76,10 +76,9 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     }
 
     private void invalidateConfirmed(DialogInterface dialogInterface, int i) {
-        String requestKey = SharedPreferenceUtil.getRequestKey(sharedpreferences);
         buttonInvalidate.setVisibility(View.GONE);
         loader.setVisibility(View.VISIBLE);
-        handler.invalidate(requestKey, this::handleInvalidate);
+        handler.invalidate(getRequestKey(), this::handleInvalidate);
     }
 
     private void handleInvalidate(WebResponse response, Exception e) {
@@ -93,6 +92,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
                     buttonInvalidate.setVisibility(View.VISIBLE);
                 } else {
                     goToWelcomingScreen();
+                    SharedPreferenceUtil.removeChattingPartnersData(sharedpreferences);
                 }
             }
         });

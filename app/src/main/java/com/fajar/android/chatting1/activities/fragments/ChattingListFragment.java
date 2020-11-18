@@ -109,6 +109,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
         chattingListLayout.removeAllViews();
         if (response.getResultList().size() == 0) {
             showInfoEmpty();
+            SharedPreferenceUtil.removeChattingPartnersData(sharedpreferences);
             return;
         }
         SharedPreferenceUtil.putChattingPartnersData(sharedpreferences, response);

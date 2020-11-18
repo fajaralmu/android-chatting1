@@ -93,6 +93,16 @@ public class SharedPreferenceUtil {
 
     }
 
+    public static void remove(SharedPreferences sharedPreferences, String key){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(key);
+        editor.commit();
+        Logs.log("Remove Shared Preferences: ", key);
+        String deletedValue = (sharedPreferences.getString(key, "NULL"));
+        Logs.log("Deleted Value: ", deletedValue);
+
+    }
+
     public static void putRequestKey(SharedPreferences sharedPreferences, String requestKey){
         putString(sharedPreferences, "request_key", requestKey);
     }
@@ -108,5 +118,9 @@ public class SharedPreferenceUtil {
 
     public static WebResponse getSessionData(SharedPreferences sharedPreferences){
         return getObject(sharedPreferences, "session_data", WebResponse.class);
+    }
+
+    public static void removeChattingPartnersData(SharedPreferences sharedpreferences) {
+        remove(sharedpreferences, "chatting_partners");
     }
 }

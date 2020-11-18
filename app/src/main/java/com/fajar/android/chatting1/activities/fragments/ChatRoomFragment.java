@@ -77,6 +77,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
     private void initEvents() {
         setLoaderGone();
         getMessages();
+        inputMessage.setText("");
         buttonSendMessage.setOnClickListener(this::sendMessage);
     }
 
