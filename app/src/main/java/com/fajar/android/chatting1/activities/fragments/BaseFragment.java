@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
+import com.fajar.android.chatting1.constants.Actions;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.BaseHandler;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
@@ -27,6 +28,7 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
     protected View view;
     protected H handler;
     protected ProgressBar loader;
+    protected Actions initialAction = Actions.NONE;
 
     public BaseFragment() {
     }
@@ -38,6 +40,14 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
     protected  <T extends View> T findById(int id){
         if(null == view){return null;}
         return view.findViewById(id);
+    }
+
+    public final void setInitialAction(Actions initialAction) {
+        this.initialAction = initialAction;
+    }
+
+    public final Actions getInitialAction() {
+        return initialAction;
     }
 
     public final String getBreadCumbLabel(){
@@ -69,9 +79,9 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
     }
 
     public static BaseFragment newInstance(int fragmentId, Class<?> _class){
-        return newInstance(fragmentId, _class, null);
+        return newInstance(fragmentId, _class, null, null);
     }
-    public static BaseFragment newInstance(int fragmentId, Class<?> _class, String breadCumbLabel) {
+    public static BaseFragment newInstance(int fragmentId, Class<?> _class, String breadCumbLabel, Actions initialAction) {
         if (_class == null && customFragments.get(fragmentId) != null) {
             _class = customFragments.get(fragmentId);
         }
@@ -87,6 +97,9 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
             myFragment.setArguments(args);
             myFragment.setFragmentId(fragmentId);
             myFragment.setBreadCumbLabel(breadCumbLabel);
+            if(null != initialAction){
+                myFragment.setInitialAction(initialAction);
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (java.lang.InstantiationException e) {

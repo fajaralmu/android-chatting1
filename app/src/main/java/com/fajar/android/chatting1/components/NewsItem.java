@@ -93,9 +93,9 @@ public class NewsItem extends LinearLayout {
         if (isLoadImage()) {
             loadImage();
         }
-        if (parentActivity != null && parentActivity.getPostBitmap(post.getId()) != null) {
-            imageThumbnail.setImageBitmap(parentActivity.getPostBitmap(post.getId()));
-        }
+//        if (parentActivity != null && parentActivity.getPostBitmap(post.getId()) != null) {
+//            imageThumbnail.setImageBitmap(parentActivity.getPostBitmap(post.getId()));
+//        }
 
         setTitle(post.getTitle());
         setNewsDate(post.getDate());
@@ -120,8 +120,9 @@ public class NewsItem extends LinearLayout {
         return new ImageViewWithURL.HandleBitmapResult() {
             @Override
             public void handleBitmap(Bitmap bitmap) {
-                if (null != parentActivity)
-                    parentActivity.addPostBitmap(post.getId(), bitmap);
+                if (null != parentActivity) {
+             //       parentActivity.addPostBitmap(post.getId(), bitmap);
+                }
             }
         };
     }

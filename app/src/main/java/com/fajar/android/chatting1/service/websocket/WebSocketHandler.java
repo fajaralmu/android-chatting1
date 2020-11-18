@@ -19,6 +19,7 @@ public class WebSocketHandler implements CustomMessageHandler {
     private MyConsumer<WebResponse> newChatMessageCallback;
 
     public WebSocketHandler(String wsURL, RegisteredRequest account) {
+        Logs.log("NEW WebSocketHandler");
         this.wsURL = wsURL;
         this.account = account;
     }
@@ -56,7 +57,11 @@ public class WebSocketHandler implements CustomMessageHandler {
             @Override
             protected String doInBackground(String... strings) {
                 ThreadUtil.runAndStart(() -> {
-                    appClientEndpoint.start();
+                    try {
+                        appClientEndpoint.start();
+                    }catch (Exception e){
+                        Logs.log("Error start app client endpoint: ", e);
+                    }
                 });
                 return null;
             }

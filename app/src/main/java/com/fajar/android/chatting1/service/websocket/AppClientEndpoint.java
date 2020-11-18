@@ -1,5 +1,8 @@
 package com.fajar.android.chatting1.service.websocket;
 
+import android.app.Activity;
+import android.os.AsyncTask;
+
 import com.fajar.android.chatting1.handlers.MyConsumer;
 import com.fajar.android.chatting1.service.Commons;
 import com.fajar.android.chatting1.util.Logs;
@@ -41,6 +44,8 @@ public class AppClientEndpoint /*extends Endpoint */ {
     private final Map<String, Object> subscribedTopics = new HashMap<>();
     private final String subscriptionPrefix;
     private MyConsumer onOpenCallback, onConnectCallback;
+
+    private boolean connected = false;
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -176,30 +181,7 @@ public class AppClientEndpoint /*extends Endpoint */ {
 
     @OnMessage
     public void onMessage(final String message, Session session) {
-        logger.info("Received Message: " + message);
-        try {
-            WebResponse messagePayload = null;
-
-            if (isWithSockJs() && isSockJsMessageResponse(message)) {
-                messagePayload = MessageMapper.parseSockJsResponse(message, WebResponse.class);
-            } else {
-                messagePayload = MessageMapper.getMessage(message);
-            }
-
-            if (null != CustomMessageHandler && messagePayload != null) {
-                CustomMessageHandler.handleOnMessage(messagePayload, this);
-            } else if (null != CustomMessageHandler) {
-                CustomMessageHandler.handleOnMessage(message, this);
-            }
-
-            if (message.startsWith("a[\"CONNECTED")) {
-                handleOnConnect(session, message);
-            }
-        } catch (Exception e) {
-
-            throw new RuntimeException(e);
-
-        }
+         onMessageTask().execute(message, session);
     }
 
     private boolean isSockJsMessageResponse(String raw) {
@@ -212,8 +194,12 @@ public class AppClientEndpoint /*extends Endpoint */ {
                 Logs.log("Empty On Connect Callback");
             };
         }
-
+        setConnected(true);
         onConnectCallback.accept(session, null);
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 
     @OnClose
@@ -224,7 +210,14 @@ public class AppClientEndpoint /*extends Endpoint */ {
 
     }
 
+    public boolean isConnected() {
+        return connected;
+    }
+
     public void start() {
+        if(isConnected()){
+            return;
+        }
 
         latch = new CountDownLatch(1);
         ClientManager client = ClientManager.createClient();
@@ -256,5 +249,45 @@ public class AppClientEndpoint /*extends Endpoint */ {
 
     public boolean isWithSockJs() {
         return withSockJS;
+    }
+
+    private Session handleOnMessageOnBackground(String message, Session session){
+        logger.info("Received Message: " + message);
+        try {
+            WebResponse messagePayload = null;
+
+            if (isWithSockJs() && isSockJsMessageResponse(message)) {
+                messagePayload = MessageMapper.parseSockJsResponse(message, WebResponse.class);
+            } else {
+                messagePayload = MessageMapper.getMessage(message);
+            }
+
+            if (null != CustomMessageHandler && messagePayload != null) {
+                CustomMessageHandler.handleOnMessage(messagePayload, this);
+            } else if (null != CustomMessageHandler) {
+                CustomMessageHandler.handleOnMessage(message, this);
+            }
+
+            if (message.startsWith("a[\"CONNECTED")) {
+                handleOnConnect(session, message);
+            }
+        } catch (Exception e) {
+
+            Logs.log("Error on MESSAGE: ", e);
+            e.printStackTrace();
+
+
+        }
+        return session;
+    }
+
+    private AsyncTask<Object, Void, Session> onMessageTask(){
+        return new AsyncTask<Object, Void, Session>() {
+            @Override
+            protected Session doInBackground(Object... params) {
+
+                return handleOnMessageOnBackground((String)params[0],(Session) params[1]);
+            }
+        };
     }
 }

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
 import com.fajar.android.chatting1.components.ChatListItem;
+import com.fajar.android.chatting1.constants.Actions;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.ChattingListFragmentHandler;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
@@ -68,14 +69,25 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
         setLoaderGone();
         chattingListLayout.removeAllViews();
         buttonLoadChattingList.setOnClickListener(loadChattingPartnerListener());
-        
-        checkChattingPartners();
+        if(!checkInitialAction()) {
+            checkChattingPartners();
+        }
+    }
+
+    private boolean checkInitialAction() {
+        if(getInitialAction().equals(Actions.RELOAD)){
+            AlertUtil.YesAlert(getActivity(), "Info", "You have new chatting partner.. Please Reload");
+           // return true;
+        }
+        return false;
     }
 
     private void checkChattingPartners() {
         WebResponse chattingPartnersData = SharedPreferenceUtil.getChattingPartnersData(sharedpreferences);
         if(null != chattingPartnersData){
             populateChattingPartners(chattingPartnersData);
+        } else {
+            showInfoEmpty();
         }
     }
 
@@ -123,7 +135,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
 
     private void showInfoEmpty() {
         TextView textView = new TextView(getActivity());
-        textView.setText("No Partner yet.");
+        textView.setText("No Partner yet. Please Search for Partner to Chat With");
         chattingListLayout.addView(textView);
     }
 

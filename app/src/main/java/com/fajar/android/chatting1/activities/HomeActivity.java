@@ -16,10 +16,12 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fajar.android.chatting1.activities.fragments.BaseFragment;
 import com.fajar.android.chatting1.activities.fragments.ChatRoomFragment;
+import com.fajar.android.chatting1.constants.Actions;
 import com.fajar.android.chatting1.constants.Extras;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.HomeActivityHandler;
@@ -38,17 +40,16 @@ import static android.view.View.*;
 public class HomeActivity extends FragmentActivity {
 
     private int currentFragmentId;
+    private Actions nextAction = Actions.NONE;
+    private boolean insideCatalogPage;
 
     private BottomNavigationView bottomNavigationView;
     private TextView breadCumb;
     private BaseFragment currentFragment;
 
 
-    private boolean insideCatalogPage;
     private SharedPreferences sharedPreferences;
     private HomeActivityHandler handler;
-
-    private Map<Object, Bitmap> postBitmaps = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,26 +59,12 @@ public class HomeActivity extends FragmentActivity {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         sharedPreferences = getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, Context.MODE_PRIVATE);
-//        startActivityForResult(getIntent(), TheApplication.REQUEST_CODE.value);
         StrictMode.setThreadPolicy(policy);
         Logs.log("ONCREATE....");
         setContentView(R.layout.activity_home);
         initComponent();
         initEvent();
 
-    }
-
-    public void clearPostBitmaps() {
-        postBitmaps.clear();
-    }
-
-
-    public void addPostBitmap(Object postId, Bitmap bitmap) {
-        postBitmaps.put(postId, bitmap);
-    }
-
-    public Bitmap getPostBitmap(Object postId) {
-        return postBitmaps.get(postId);
     }
 
     @Override
@@ -125,7 +112,7 @@ public class HomeActivity extends FragmentActivity {
                         break;
                     case R.id.navigation_chatting_list:
 
-                        switchFragment(R.layout.fragment_chatting_list, "Chatting List");
+                        switchChattingListPage();
                         break;
 
                     case R.id.navigation_search:
@@ -137,6 +124,10 @@ public class HomeActivity extends FragmentActivity {
                 return false;
             }
         };
+    }
+
+    private void switchChattingListPage() {
+        switchFragment(R.layout.fragment_chatting_list, "Chatting List");
     }
 
     private void switchHomePage() {
@@ -181,7 +172,7 @@ public class HomeActivity extends FragmentActivity {
             fragmentTransaction = fragmentManager.beginTransaction();
         }
 
-        BaseFragment fragment = BaseFragment.newInstance(fragmentId, null, breadCumbLabel);
+        BaseFragment fragment = BaseFragment.newInstance(fragmentId, null, breadCumbLabel, getNextAction());
 
         fragmentTransaction.replace(R.id.home_common_content_container, fragment);
         fragmentTransaction.commit();
@@ -215,18 +206,26 @@ public class HomeActivity extends FragmentActivity {
         }
 
     }
-    
+
     private void exitApplication(DialogInterface dialog, int which) {
         Navigate.navigate(this, WelcomingScreenActivity.class, Extras.EXIT_APP_KEY.value, Extras.EXIT_APP_VALUE);
     }
 
     public void setInsideCatalogPage(boolean insideCatalogPage) {
         this.insideCatalogPage = insideCatalogPage;
-        bottomNavigationView.setVisibility(insideCatalogPage?GONE:VISIBLE);
+        bottomNavigationView.setVisibility(insideCatalogPage ? GONE : VISIBLE);
     }
 
     public boolean isInsideCatalogPage() {
         return insideCatalogPage;
+    }
+
+    public void setNextAction(Actions nextAction) {
+        this.nextAction = nextAction;
+    }
+
+    public Actions getNextAction() {
+        return nextAction;
     }
 
     public void enterChatRoom(RegisteredRequest partner) {
@@ -242,13 +241,39 @@ public class HomeActivity extends FragmentActivity {
 
     ////////////// WEBSOCKET HANDLERS //////////////////////
 
-    public void showNewChatMessage(WebResponse response){
-        if(currentFragment instanceof ChatRoomFragment){
+    public void showNewChatMessage(WebResponse response) {
+        if (currentFragment instanceof ChatRoomFragment) {
             String partnerRequestId = ((ChatRoomFragment) currentFragment).getPartnerRequestId();
-            if(response.getChatMessage().getRequestId().equals(partnerRequestId) == false){
+            if (response.getChatMessage().getRequestId().equals(partnerRequestId) == false) {
                 return;
             }
             ((ChatRoomFragment) currentFragment).appendNewChatMessage(response);
         }
+
+        if (isPartnerExist(response.getChatMessage().getRequestId()) == false) {
+            Logs.log("WILL NOTIFY USER..........");
+            runOnUiThread(()-> {
+                setNextAction(Actions.RELOAD);
+                bottomNavigationView.setSelectedItemId(R.id.navigation_chatting_list);
+            });
+        }
+    }
+
+    private boolean isPartnerExist(String partnerId) {
+        WebResponse chattingData = SharedPreferenceUtil.getChattingPartnersData(sharedPreferences);
+        if (chattingData != null && chattingData.getResultList() != null) {
+            List partners = chattingData.getResultList();
+            for (Object partner :
+                    partners) {
+                try {
+                    if (((RegisteredRequest) partner).getRequestId().equals(partnerId)) {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    //
+                }
+            }
+        }
+        return false;
     }
 }
