@@ -205,6 +205,7 @@ public class HomeActivity extends FragmentActivity {
 
     public void setInsideCatalogPage(boolean insideCatalogPage) {
         this.insideCatalogPage = insideCatalogPage;
+        bottomNavigationView.setVisibility(insideCatalogPage?GONE:VISIBLE);
     }
 
     public boolean isInsideCatalogPage() {
