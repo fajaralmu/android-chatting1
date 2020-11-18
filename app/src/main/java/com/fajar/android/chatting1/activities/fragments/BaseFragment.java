@@ -74,10 +74,6 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
         super.onDetach();
     }
 
-    public static BaseFragment newInstance(int fragmentId) {
-        return newInstance(fragmentId, null);
-    }
-
     public static BaseFragment newInstance(int fragmentId, Class<?> _class){
         return newInstance(fragmentId, _class, null, null);
     }

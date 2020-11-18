@@ -134,7 +134,7 @@ public class ChatListItem extends LinearLayout {
 
     private void initEvents() {
         buttonNewsLink.setOnClickListener(this::showPopupMenu);
-        imageThumbnail.setImageResource(android.R.drawable.ic_menu_camera);
+        imageThumbnail.setImageResource(android.R.drawable.stat_notify_chat);
     }
 
     private void showPopupMenu(View view) {
