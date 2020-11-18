@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/dorm" />
+                android:src="@drawable/nc" />
 
         </LinearLayout>
 
