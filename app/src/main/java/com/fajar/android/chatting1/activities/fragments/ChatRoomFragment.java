@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.components.ChatMessageItem;
 import com.fajar.android.chatting1.handlers.ChatRoomFragmentHandler;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
+import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
@@ -25,6 +27,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
     private LinearLayout messagesLayout;
     private EditText inputMessage;
     private ImageButton buttonSendMessage;
+    private ScrollView scrollView;
 
     private RegisteredRequest partner;
 
@@ -53,6 +56,16 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         handler.getChattingMessages(partnerId, getRequestKey(), this::handleGetMessages);
     }
 
+    public void scrollToDowm() {
+        if(null!=scrollView)
+            scrollView.post(new Runnable() {
+                public void run() {
+                    Logs.log("Scroll to TOP");
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                }
+            });
+    }
+
     private void handleGetMessages(WebResponse response, Exception e) {
         stopLoading();
         if (null != e) {
@@ -65,6 +78,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
             ChatMessageItem chatMessageItem = new ChatMessageItem((Message) message, getActivity());
             messagesLayout.addView(chatMessageItem);
         }
+        scrollToDowm();
     }
 
     private void initComponents() {
@@ -72,6 +86,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         loader = findById(R.id.loader_chat_room);
         inputMessage = findById(R.id.chat_room_message_input);
         buttonSendMessage = findById(R.id.button_send_message);
+        scrollView = findById(R.id.chat_room_scroll);
     }
 
     private void initEvents() {
@@ -87,6 +102,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
             return;
         }
         loader.setVisibility(View.VISIBLE);
+        scrollToDowm();
         handler.sendMessage(partner.getRequestId(), getRequestKey(), message, this::handleSendMessage);
     }
 
@@ -98,6 +114,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         inputMessage.setText("");
         ChatMessageItem chatMessageItem = new ChatMessageItem(response.getChatMessage(), getActivity());
         messagesLayout.addView(chatMessageItem);
+        scrollToDowm();
     }
 
     private void getMessages() {
