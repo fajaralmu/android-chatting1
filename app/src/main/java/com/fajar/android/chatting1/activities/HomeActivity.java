@@ -32,6 +32,7 @@ import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.android.chatting1.util.Navigate;
 import com.fajar.android.chatting1.R;
+import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -249,29 +250,35 @@ public class HomeActivity extends FragmentActivity {
     ////////////// WEBSOCKET HANDLERS //////////////////////
 
     public void showNewChatMessage(WebResponse response) {
-        if (currentFragment instanceof ChatRoomFragment) {
-            String partnerRequestId = ((ChatRoomFragment) currentFragment).getPartnerRequestId();
-            if (response.getChatMessage().getRequestId().equals(partnerRequestId) == false) {
-                return;
-            }
-            ((ChatRoomFragment) currentFragment).appendNewChatMessage(response);
-        }
+        final Message chatMessage = response.getChatMessage();
+        runOnUiThread(() -> {
 
-        if (isPartnerExist(response.getChatMessage().getRequestId()) == false) {
-
-            if(currentFragment instanceof ChattingListFragment){
-                runOnUiThread(()->{
-                    ((ChattingListFragment) currentFragment).doByAction(Actions.RELOAD);
-                });
-                return;
+            if (currentFragment instanceof ChatRoomFragment) {
+                String partnerRequestId = ((ChatRoomFragment) currentFragment).getPartnerRequestId();
+                if (chatMessage.getRequestId().equals(partnerRequestId) == false) {
+                    return;
+                }
+                ((ChatRoomFragment) currentFragment).appendNewChatMessage(response);
             }
 
-            Logs.log("WILL NOTIFY USER..........");
-            runOnUiThread(()-> {
+            if (isPartnerExist(chatMessage.getRequestId()) == false) {
+
+                if (currentFragment instanceof ChattingListFragment) {
+                    currentFragment.doByAction(Actions.RELOAD);
+                    return;
+                }
+
+                Logs.log("WILL NOTIFY USER..........");
                 setNextAction(Actions.RELOAD);
                 bottomNavigationView.setSelectedItemId(R.id.navigation_chatting_list);
-            });
-        }
+            } else {
+
+                SharedPreferenceUtil.addChattingMessage(sharedPreferences, chatMessage.getRequestId(), chatMessage, true);
+            }
+
+
+
+        });
     }
 
     private boolean isPartnerExist(String partnerId) {

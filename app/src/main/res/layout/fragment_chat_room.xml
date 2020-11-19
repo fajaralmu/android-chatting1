@@ -68,7 +68,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:background="@android:color/holo_green_light"
+        android:background="?attr/colorButtonNormal"
         android:orientation="horizontal"
         android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -91,6 +91,15 @@
             android:layout_weight="1"
             android:background="@null"
             android:src="@android:drawable/ic_menu_send"
+            android:tint="@android:color/background_light" />
+
+        <ImageButton
+            android:id="@+id/button_reload_message"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:src="@android:drawable/ic_popup_sync"
             android:tint="@android:color/background_light" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

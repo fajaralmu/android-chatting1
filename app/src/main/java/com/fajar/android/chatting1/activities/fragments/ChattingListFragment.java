@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,7 +37,8 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
 
     private LinearLayout chattingListLayout, infoLabelWrapper;
     private TextView infoLabel;
-    private ImageButton buttonLoadChattingList, buttonCloseInfoLabel;
+    private ImageButton buttonLoadChattingList;
+    private ImageView buttonCloseInfoLabel;
 
 
     public ChattingListFragment() {
@@ -90,7 +92,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     @Override
     public void doByAction(Actions action) {
         Logs.log("Chatting List Fragment doByAction: ", action);
-        if(getInitialAction().equals(Actions.RELOAD)){
+        if(action.equals(Actions.RELOAD)){
 //            AlertUtil.YesAlert(getActivity(), "Info", "You have new chatting partner.. Please Reload");
             // return true;
             setInfoLabelText("You have new chatting partner.. Please Reload");
@@ -140,7 +142,13 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
             return;
         }
         SharedPreferenceUtil.putChattingPartnersData(sharedpreferences, response);
+
         List partners = response.getResultList();
+        populateChattingListLayout(partners);
+
+    }
+
+    private void populateChattingListLayout(List partners) {
         for (Object partner :
                 partners) {
             ChatListItem chatListItem = new ChatListItem((RegisteredRequest) partner, false, getActivity());

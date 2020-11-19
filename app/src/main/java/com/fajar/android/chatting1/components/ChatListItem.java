@@ -127,7 +127,7 @@ public class ChatListItem extends LinearLayout {
         newsTitle = findViewById(R.id.chat_item_partner_name);
         newsDate = findViewById(R.id.chat_item_last_message_date);
         buttonNewsLink = findViewById(R.id.chat_list_item_options);
-        buttonNewsLink.setImageResource((android.R.drawable.ic_menu_info_details));
+        buttonNewsLink.setImageResource((R.drawable.ic_more_vert_black_24dp));
 
 
     }

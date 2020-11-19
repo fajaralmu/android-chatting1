@@ -14,6 +14,7 @@ import android.widget.ScrollView;
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.components.ChatMessageItem;
 import com.fajar.android.chatting1.handlers.ChatRoomFragmentHandler;
+import com.fajar.android.chatting1.models.ChattingData;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.Message;
@@ -26,7 +27,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
 
     private LinearLayout messagesLayout;
     private EditText inputMessage;
-    private ImageButton buttonSendMessage;
+    private ImageButton buttonSendMessage, buttonReloadMessage;
     private ScrollView scrollView;
 
     private RegisteredRequest partner;
@@ -41,8 +42,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_chat_room, container, false);
         setSharedpreferences();
-        initComponents();
-        initEvents();
+
         return view;
     }
 
@@ -50,20 +50,20 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+        initComponents();
+        initEvents();
     }
 
-    private void getMessages(String partnerId) {
+    private void loadMessages(String partnerId) {
         loader.setVisibility(View.VISIBLE);
         handler.getChattingMessages(partnerId, getRequestKey(), this::handleGetMessages);
     }
 
     public void scrollToDowm() {
-        if(null!=scrollView)
-            scrollView.post(new Runnable() {
-                public void run() {
-                    Logs.log("Scroll to TOP");
-                    scrollView.fullScroll(View.FOCUS_DOWN);
-                }
+        if (null != scrollView)
+            scrollView.post(() -> {
+                Logs.log("Scroll to TOP");
+                scrollView.fullScroll(View.FOCUS_DOWN);
             });
     }
 
@@ -72,14 +72,19 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         if (null != e) {
             return;
         }
+
+        SharedPreferenceUtil.setChattingData(sharedpreferences, partner, response);
+        populateMessages(response.getResultList());
+        scrollToDowm();
+    }
+
+    private void populateMessages(List messages) {
         messagesLayout.removeAllViews();
-        List messages = response.getResultList();
         for (Object message :
                 messages) {
             ChatMessageItem chatMessageItem = new ChatMessageItem((Message) message, getActivity(), myAccount, partner);
             messagesLayout.addView(chatMessageItem);
         }
-        scrollToDowm();
     }
 
     private void initComponents() {
@@ -87,20 +92,41 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         loader = findById(R.id.loader_chat_room);
         inputMessage = findById(R.id.chat_room_message_input);
         buttonSendMessage = findById(R.id.button_send_message);
+        buttonReloadMessage = findById(R.id.button_reload_message);
         scrollView = findById(R.id.chat_room_scroll);
         myAccount = SharedPreferenceUtil.getSessionData(sharedpreferences).getRegisteredRequest();
+        partner = SharedPreferenceUtil.getObject(sharedpreferences, "chat_partner", RegisteredRequest.class);
     }
 
     private void initEvents() {
         setLoaderGone();
-        getMessages();
+
         inputMessage.setText("");
         buttonSendMessage.setOnClickListener(this::sendMessage);
+        buttonReloadMessage.setOnClickListener((v) -> {
+            loadMessages();
+        });
+        try {
+            getActivity().runOnUiThread(() -> {
+                checkStoredMessages();
+            });
+        } catch (Exception e) {
+            //
+        }
+    }
+
+    private void checkStoredMessages() {
+        ChattingData chattingData = SharedPreferenceUtil.getChattingData(sharedpreferences, partner.getRequestId());
+        if (null == chattingData || chattingData.getMessages().size() == 0) {
+            loadMessages();
+            return;
+        }
+        populateMessages(chattingData.getMessages());
     }
 
     private void sendMessage(View view) {
         String message = inputMessage.getText().toString();
-        if(null == message || message.isEmpty()){
+        if (null == message || message.isEmpty()) {
             return;
         }
         loader.setVisibility(View.VISIBLE);
@@ -110,28 +136,30 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
 
     private void handleSendMessage(WebResponse response, Exception e) {
         stopLoading();
-        if(null != e){
+        if (null != e) {
             return;
         }
         inputMessage.setText("");
         appendNewChatMessage(response);
     }
 
-    public String getPartnerRequestId(){
+    public String getPartnerRequestId() {
         return partner.getRequestId();
     }
 
-    public void appendNewChatMessage(WebResponse response){
-        getActivity().runOnUiThread(()-> {
+    public void appendNewChatMessage(WebResponse response) {
+        getActivity().runOnUiThread(() -> {
             ChatMessageItem chatMessageItem = new ChatMessageItem(response.getChatMessage(), getActivity(), myAccount, partner);
             messagesLayout.addView(chatMessageItem);
+
+            SharedPreferenceUtil.addChattingMessage(sharedpreferences, partner, response.getChatMessage(), false);
             scrollToDowm();
         });
     }
 
-    private void getMessages() {
-        this.partner = SharedPreferenceUtil.getObject(sharedpreferences, "chat_partner", RegisteredRequest.class);
-        getMessages(partner.getRequestId());
+    private void loadMessages() {
+
+        loadMessages(partner.getRequestId());
     }
 
 

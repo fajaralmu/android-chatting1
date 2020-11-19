@@ -1,7 +1,6 @@
 package com.fajar.android.chatting1.service;
 
 import com.fajar.android.chatting1.constants.Endpoints;
-import com.fajar.android.chatting1.models.PostResponse;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.WebRequest;
 import com.fajar.livestreaming.dto.WebResponse;
