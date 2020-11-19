@@ -261,6 +261,9 @@ public class HomeActivity extends FragmentActivity {
                 }
                 ((ChatRoomFragment) currentFragment).appendNewChatMessage(response);
             }
+            if (currentFragment instanceof ChattingListFragment) {
+                ((ChattingListFragment) currentFragment).addUnreadMessage(chatMessage);
+            }
 
             if (isPartnerExist(chatMessage.getRequestId()) == false) {
 

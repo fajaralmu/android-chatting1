@@ -29,11 +29,14 @@ import com.fajar.android.chatting1.models.ChattingData;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
+import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandler> {
 
@@ -41,7 +44,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     private TextView infoLabel;
     private ImageButton buttonLoadChattingList;
     private ImageView buttonCloseInfoLabel;
-    private List<ChatListItem> chatListItems = new ArrayList<>();
+    private Map<String, ChatListItem> chatListItems = new LinkedHashMap<>();
 
     public ChattingListFragment() {
         setHandler(ChattingListFragmentHandler.getInstance(this));
@@ -89,8 +92,8 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
 
     }
 
-    private void addChatListItem(ChatListItem chatListItem){
-        chatListItems.add(chatListItem);
+    private void addChatListItem(String partnerId, ChatListItem chatListItem){
+        chatListItems.put(partnerId, chatListItem);
     }
 
     private boolean checkInitialAction() {
@@ -166,7 +169,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
             ChattingData chattingData = SharedPreferenceUtil.getChattingData(sharedpreferences, partner.getRequestId());
             ChatListItem chatListItem = new ChatListItem((RegisteredRequest) partner, false, getActivity(), chattingData);
             chattingListLayout.addView(chatListItem);
-            addChatListItem(chatListItem);
+            addChatListItem(partner.getRequestId(), chatListItem);
         }
     }
 
@@ -181,5 +184,14 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
             infoLabel.setText(message);
             Logs.log(" setInfoLabelText(String message)", infoLabel.getText());
         });
+    }
+
+    public void addUnreadMessage(Message chatMessage) {
+        String partnerId = chatMessage.getRequestId();
+        if(chatListItems.get(partnerId) == null){
+            return;
+        }
+
+        chatListItems.get(partnerId).addUnreadMessage();
     }
 }

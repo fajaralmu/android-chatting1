@@ -33,6 +33,7 @@ public class ChatListItem extends LinearLayout {
     final boolean loadImage;
     final ChattingData chattingData;
     final HomeActivity parentActivity;
+    private int unreadMessage;
 
     public ChatListItem(RegisteredRequest partnerAccount, boolean loadImage, Activity parentActivity, ChattingData chattingData) {
         super(parentActivity);
@@ -69,6 +70,7 @@ public class ChatListItem extends LinearLayout {
                 "+" + new Date() :
                 partnerAccount.getCreated().toString());
         if (null != chattingData) {
+            unreadMessage = chattingData.getUnreadMessages();
             setUnreadMessage((chattingData.getUnreadMessages()));
         }
     }
@@ -158,5 +160,10 @@ public class ChatListItem extends LinearLayout {
 
     public boolean isLoadImage() {
         return loadImage;
+    }
+
+    public void addUnreadMessage() {
+        unreadMessage++;
+        setUnreadMessage(unreadMessage);
     }
 }
