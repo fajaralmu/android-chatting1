@@ -34,11 +34,12 @@ import java.util.List;
 
 public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandler> {
 
-    private LinearLayout chattingListLayout;
-    private ImageButton buttonLoadChattingList;
+    private LinearLayout chattingListLayout, infoLabelWrapper;
+    private TextView infoLabel;
+    private ImageButton buttonLoadChattingList, buttonCloseInfoLabel;
+
 
     public ChattingListFragment() {
-
         setHandler(ChattingListFragmentHandler.getInstance(this));
     }
 
@@ -63,15 +64,22 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
         chattingListLayout =  findById(R.id.chat_list_layout);
         buttonLoadChattingList = findById(R.id.button_load_chatting_list);
         loader =  view.findViewById(R.id.loader_chatting_list);
+        infoLabel = findById(R.id.chatting_list_info);
+        infoLabelWrapper = findById(R.id.chatting_list_info_label_wrapper);
+        buttonCloseInfoLabel = findById(R.id.button_chatting_list_info_label_close);
     }
 
     private void initEvents() {
         setLoaderGone();
+        infoLabelWrapper.setVisibility(View.GONE);
         chattingListLayout.removeAllViews();
         buttonLoadChattingList.setOnClickListener(loadChattingPartnerListener());
-        if(!checkInitialAction()) {
+        buttonCloseInfoLabel.setOnClickListener((v)->{infoLabelWrapper.setVisibility(View.GONE);});
+      //  if(!checkInitialAction()) {
             checkChattingPartners();
-        }
+     //   }
+        checkInitialAction();
+
     }
 
     private boolean checkInitialAction() {
@@ -83,8 +91,9 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     public void doByAction(Actions action) {
         Logs.log("Chatting List Fragment doByAction: ", action);
         if(getInitialAction().equals(Actions.RELOAD)){
-            AlertUtil.YesAlert(getActivity(), "Info", "You have new chatting partner.. Please Reload");
+//            AlertUtil.YesAlert(getActivity(), "Info", "You have new chatting partner.. Please Reload");
             // return true;
+            setInfoLabelText("You have new chatting partner.. Please Reload");
         }
     }
 
@@ -140,10 +149,15 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     }
 
     private void showInfoEmpty() {
-        TextView textView = new TextView(getActivity());
-        textView.setText("No Partner yet. Please Search for Partner to Chat With");
-        chattingListLayout.addView(textView);
+        setInfoLabelText("No Partner yet. Please Search for Partner to Chat With");
+
     }
 
-
+    private void setInfoLabelText(String message){
+        getActivity().runOnUiThread(()-> {
+            infoLabelWrapper.setVisibility(View.VISIBLE);
+            infoLabel.setText(message);
+            Logs.log(" setInfoLabelText(String message)", infoLabel.getText());
+        });
+    }
 }

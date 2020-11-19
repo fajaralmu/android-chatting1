@@ -91,7 +91,7 @@
                 app:layout_constraintHorizontal_bias="0.98"
                 app:layout_constraintStart_toEndOf="@+id/chat_item_thumbnail"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_menu_info_details" />
+                app:srcCompat="@drawable/ic_more_vert_black_24dp" />
 
 
         </android.support.constraint.ConstraintLayout>

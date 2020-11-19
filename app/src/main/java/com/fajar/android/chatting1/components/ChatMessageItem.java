@@ -58,7 +58,7 @@ public class ChatMessageItem extends LinearLayout {
     public void populateContent(Message message) {
 
         if(message.getRequestId().equals(sender.getRequestId())){
-            messageCard.setCardBackgroundColor(Color.rgb(200,255,255));
+            messageCard.setCardBackgroundColor(Color.rgb(240,228,176));
         }
         messageBody.setText(message.getBody());
         messageDate.setText(message.getDate() == null ?
