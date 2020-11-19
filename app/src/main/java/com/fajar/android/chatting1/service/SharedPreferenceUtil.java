@@ -152,7 +152,9 @@ public class SharedPreferenceUtil {
             chattingData.setPartner(partner);
         }
         chattingData.addMessage(message);
+        Logs.log("addChattingMessage:", unread);
         if (unread) {
+
             chattingData.addUnreadMessage();
         } else {
             chattingData.setUnreadMessages(0);
@@ -161,7 +163,7 @@ public class SharedPreferenceUtil {
     }
 
     public static void addChattingMessage(SharedPreferences sharedPreferences, String partnerId, Message message, boolean unread) {
-        Logs.log("addChattingMessage: ",partnerId);
+        Logs.log("addChattingMessage partnerId: ",partnerId, "unread: ", unread);
         RegisteredRequest partner = getChattingPartner(sharedPreferences, partnerId);
         addChattingMessage(sharedPreferences, partner, message, unread);
 

@@ -45,7 +45,7 @@ public class ChatListItem extends LinearLayout {
         } else {
             this.parentActivity = null;
         }
-        init(parentActivity,null);
+        init(parentActivity, null);
         populateContent();
 
     }
@@ -68,13 +68,13 @@ public class ChatListItem extends LinearLayout {
         setNewsDate(partnerAccount.getCreated() == null ?
                 "+" + new Date() :
                 partnerAccount.getCreated().toString());
-        if( null != chattingData) {
+        if (null != chattingData) {
             setUnreadMessage((chattingData.getUnreadMessages()));
         }
     }
 
-    public void setUnreadMessage(int unreadMessage){
-        labelUnreadMessage.setText(String.valueOf(unreadMessage));
+    public void setUnreadMessage(int unreadMessage) {
+        labelUnreadMessage.setText("Unread message(s):" + (unreadMessage));
     }
 
     public void loadImage() {
@@ -132,7 +132,7 @@ public class ChatListItem extends LinearLayout {
         if (null == partnerAccount) {
             return;
         }
-        parentActivity.enterChatRoom(partnerAccount );
+        parentActivity.enterChatRoom(partnerAccount);
         // Navigate.openLink(partnerAccount.newsLink(), getContext());
     }
 

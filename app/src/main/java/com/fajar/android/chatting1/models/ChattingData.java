@@ -36,4 +36,8 @@ public class ChattingData implements Serializable {
         }
         messages.add(message);
     }
+
+    public boolean hasUnreadMessage() {
+        return unreadMessages > 0;
+    }
 }

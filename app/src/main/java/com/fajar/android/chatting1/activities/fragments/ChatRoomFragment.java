@@ -30,8 +30,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
     private ImageButton buttonSendMessage, buttonReloadMessage;
     private ScrollView scrollView;
 
-    private RegisteredRequest partner;
-    private RegisteredRequest myAccount;
+    private RegisteredRequest partner, myAccount;
 
     public ChatRoomFragment() {
         setHandler(ChatRoomFragmentHandler.getInstance(this));
@@ -117,10 +116,12 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
 
     private void checkStoredMessages() {
         ChattingData chattingData = SharedPreferenceUtil.getChattingData(sharedpreferences, partner.getRequestId());
-        if (null == chattingData || chattingData.getMessages().size() == 0) {
+        if (null == chattingData || chattingData.getMessages().size() == 0 || chattingData.hasUnreadMessage()) {
             loadMessages();
             return;
         }
+        chattingData.setUnreadMessages(0);
+        SharedPreferenceUtil.setChattingData(sharedpreferences, partner.getRequestId(), chattingData);
         populateMessages(chattingData.getMessages());
     }
 
