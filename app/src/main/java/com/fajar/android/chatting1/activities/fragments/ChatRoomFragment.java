@@ -148,6 +148,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
     }
 
     public void appendNewChatMessage(WebResponse response) {
+
         getActivity().runOnUiThread(() -> {
             ChatMessageItem chatMessageItem = new ChatMessageItem(response.getChatMessage(), getActivity(), myAccount, partner);
             messagesLayout.addView(chatMessageItem);

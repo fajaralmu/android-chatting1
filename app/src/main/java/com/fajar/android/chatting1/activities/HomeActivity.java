@@ -250,6 +250,7 @@ public class HomeActivity extends FragmentActivity {
     ////////////// WEBSOCKET HANDLERS //////////////////////
 
     public void showNewChatMessage(WebResponse response) {
+        Logs.log("Websocket HANDLE showNewChatMessage");
         final Message chatMessage = response.getChatMessage();
         runOnUiThread(() -> {
 
@@ -271,13 +272,11 @@ public class HomeActivity extends FragmentActivity {
                 Logs.log("WILL NOTIFY USER..........");
                 setNextAction(Actions.RELOAD);
                 bottomNavigationView.setSelectedItemId(R.id.navigation_chatting_list);
+
             } else {
 
                 SharedPreferenceUtil.addChattingMessage(sharedPreferences, chatMessage.getRequestId(), chatMessage, true);
             }
-
-
-
         });
     }
 

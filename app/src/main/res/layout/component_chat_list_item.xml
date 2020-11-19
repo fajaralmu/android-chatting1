@@ -71,6 +71,14 @@
                     android:text="7 Nov 2020, 18:53"
                     android:textSize="11sp" />
 
+                <TextView
+                    android:id="@+id/chat_item_unread_message_ciunt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="0"
+                    android:textSize="11sp" />
+
             </LinearLayout>
 
             <ImageView

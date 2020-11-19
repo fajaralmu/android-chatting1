@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
+import com.fajar.android.chatting1.models.ChattingData;
 import com.fajar.android.chatting1.service.ImageViewWithURL;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.RegisteredRequest;
@@ -24,56 +25,38 @@ import java.util.Date;
 public class ChatListItem extends LinearLayout {
     private ImageView imageThumbnail;
     private TextView newsTitle;
+    private TextView labelUnreadMessage;
     private TextView newsDate;
     private ImageView buttonNewsLink;
     private RegisteredRequest partnerAccount;
 
     final boolean loadImage;
+    final ChattingData chattingData;
     final HomeActivity parentActivity;
 
-    public ChatListItem(RegisteredRequest partnerAccount, boolean loadImage, Activity parentActivity) {
+    public ChatListItem(RegisteredRequest partnerAccount, boolean loadImage, Activity parentActivity, ChattingData chattingData) {
         super(parentActivity);
         this.loadImage = loadImage;
+        this.chattingData = chattingData;
+        this.partnerAccount = partnerAccount;
+
         if (parentActivity instanceof HomeActivity) {
             this.parentActivity = (HomeActivity) parentActivity;
         } else {
             this.parentActivity = null;
         }
-        init(parentActivity, null);
-        this.partnerAccount = partnerAccount;
-        populateContent(partnerAccount);
+        init(parentActivity,null);
+        populateContent();
+
     }
 
     private void init(Context context, AttributeSet attrs) {
         inflate(context, R.layout.component_chat_list_item, this);
         initComponents();
         initEvents();
-        if (null != attrs) {
-            int[] sets = {R.attr.imageLabelDrawableId, R.attr.imageLabelText};
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, sets);
-            for (int i = 0; i < attrs.getAttributeCount(); i++) {
-                String attributeName = attrs.getAttributeName(i);
-                switch (attributeName) {
-                    case "newsItemThumbnail":
-                        int value = attrs.getAttributeResourceValue(i, R.drawable.ic_home_black_24dp);
-                        imageThumbnail.setImageResource(value);
-                        break;
-                    case "newsItemTitle":
-                        String labelText = attrs.getAttributeValue(i);
-                        newsTitle.setText(labelText);
-                        break;
-                    case "newsItemDate":
-                        labelText = attrs.getAttributeValue(i);
-                        newsTitle.setText(labelText);
-                        break;
-                }
-                Logs.log(i, " attr: ", attrs.getAttributeName(i), "=", attrs.getAttributeValue(i));
-            }
-            typedArray.recycle();
-        }
     }
 
-    public void populateContent(RegisteredRequest partnerAccount) {
+    public void populateContent() {
         if (isLoadImage()) {
             loadImage();
         }
@@ -85,6 +68,13 @@ public class ChatListItem extends LinearLayout {
         setNewsDate(partnerAccount.getCreated() == null ?
                 "+" + new Date() :
                 partnerAccount.getCreated().toString());
+        if( null != chattingData) {
+            setUnreadMessage((chattingData.getUnreadMessages()));
+        }
+    }
+
+    public void setUnreadMessage(int unreadMessage){
+        labelUnreadMessage.setText(String.valueOf(unreadMessage));
     }
 
     public void loadImage() {
@@ -92,13 +82,6 @@ public class ChatListItem extends LinearLayout {
             return;
         }
         return;
-
-//        String url = partnerAccount.getImages().getThumbnail();
-//        Logs.log("START load image:", url);
-//        ImageViewWithURL imageViewContents = new ImageViewWithURL(imageThumbnail, url, bitmapHandler());
-////        downloadImageTask =
-//                imageViewContents.populate();
-//        Logs.log("END load image:", url);
 
     }
 
@@ -128,7 +111,7 @@ public class ChatListItem extends LinearLayout {
         newsDate = findViewById(R.id.chat_item_last_message_date);
         buttonNewsLink = findViewById(R.id.chat_list_item_options);
         buttonNewsLink.setImageResource((R.drawable.ic_more_vert_black_24dp));
-
+        labelUnreadMessage = findViewById(R.id.chat_item_unread_message_ciunt);
 
     }
 
@@ -162,11 +145,8 @@ public class ChatListItem extends LinearLayout {
                         enterChatRoom();
                         break;
                     default:
-
                         break;
-
                 }
-
                 return false;
             }
         };

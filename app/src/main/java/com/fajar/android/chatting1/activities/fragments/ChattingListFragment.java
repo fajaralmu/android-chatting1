@@ -25,12 +25,14 @@ import com.fajar.android.chatting1.components.ChatListItem;
 import com.fajar.android.chatting1.constants.Actions;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.ChattingListFragmentHandler;
+import com.fajar.android.chatting1.models.ChattingData;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandler> {
@@ -39,7 +41,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     private TextView infoLabel;
     private ImageButton buttonLoadChattingList;
     private ImageView buttonCloseInfoLabel;
-
+    private List<ChatListItem> chatListItems = new ArrayList<>();
 
     public ChattingListFragment() {
         setHandler(ChattingListFragmentHandler.getInstance(this));
@@ -63,9 +65,9 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
 
 
     private void initComponents() {
-        chattingListLayout =  findById(R.id.chat_list_layout);
+        chattingListLayout = findById(R.id.chat_list_layout);
         buttonLoadChattingList = findById(R.id.button_load_chatting_list);
-        loader =  view.findViewById(R.id.loader_chatting_list);
+        loader = view.findViewById(R.id.loader_chatting_list);
         infoLabel = findById(R.id.chatting_list_info);
         infoLabelWrapper = findById(R.id.chatting_list_info_label_wrapper);
         buttonCloseInfoLabel = findById(R.id.button_chatting_list_info_label_close);
@@ -73,15 +75,22 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
 
     private void initEvents() {
         setLoaderGone();
+        chatListItems.clear();
         infoLabelWrapper.setVisibility(View.GONE);
         chattingListLayout.removeAllViews();
         buttonLoadChattingList.setOnClickListener(loadChattingPartnerListener());
-        buttonCloseInfoLabel.setOnClickListener((v)->{infoLabelWrapper.setVisibility(View.GONE);});
-      //  if(!checkInitialAction()) {
-            checkChattingPartners();
-     //   }
+        buttonCloseInfoLabel.setOnClickListener((v) -> {
+            infoLabelWrapper.setVisibility(View.GONE);
+        });
+        //  if(!checkInitialAction()) {
+        checkChattingPartners();
+        //   }
         checkInitialAction();
 
+    }
+
+    private void addChatListItem(ChatListItem chatListItem){
+        chatListItems.add(chatListItem);
     }
 
     private boolean checkInitialAction() {
@@ -92,7 +101,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     @Override
     public void doByAction(Actions action) {
         Logs.log("Chatting List Fragment doByAction: ", action);
-        if(action.equals(Actions.RELOAD)){
+        if (action.equals(Actions.RELOAD)) {
 //            AlertUtil.YesAlert(getActivity(), "Info", "You have new chatting partner.. Please Reload");
             // return true;
             setInfoLabelText("You have new chatting partner.. Please Reload");
@@ -101,18 +110,19 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
 
     private void checkChattingPartners() {
         WebResponse chattingPartnersData = SharedPreferenceUtil.getChattingPartnersData(sharedpreferences);
-        if(null != chattingPartnersData){
+        if (null != chattingPartnersData) {
             populateChattingPartners(chattingPartnersData);
         } else {
             showInfoEmpty();
         }
     }
 
-    private void getChattingPartners(){
+    private void getChattingPartners() {
         loader.setVisibility(View.VISIBLE);
         chattingListLayout.removeAllViews();
         handler.getChattingPartners(getRequestKey(), this::handleChattingPartners);
     }
+
     private void handleChattingPartners(WebResponse response, Exception e) {
         stopLoading();
         buttonLoadChattingList.setVisibility(View.VISIBLE);
@@ -124,6 +134,7 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
         populateChattingPartners(response);
 
     }
+
     private View.OnClickListener loadChattingPartnerListener() {
         return new View.OnClickListener() {
             @Override
@@ -149,10 +160,13 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
     }
 
     private void populateChattingListLayout(List partners) {
-        for (Object partner :
+        for (Object object :
                 partners) {
-            ChatListItem chatListItem = new ChatListItem((RegisteredRequest) partner, false, getActivity());
+            RegisteredRequest partner = (RegisteredRequest) object;
+            ChattingData chattingData = SharedPreferenceUtil.getChattingData(sharedpreferences, partner.getRequestId());
+            ChatListItem chatListItem = new ChatListItem((RegisteredRequest) partner, false, getActivity(), chattingData);
             chattingListLayout.addView(chatListItem);
+            addChatListItem(chatListItem);
         }
     }
 
@@ -161,8 +175,8 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
 
     }
 
-    private void setInfoLabelText(String message){
-        getActivity().runOnUiThread(()-> {
+    private void setInfoLabelText(String message) {
+        getActivity().runOnUiThread(() -> {
             infoLabelWrapper.setVisibility(View.VISIBLE);
             infoLabel.setText(message);
             Logs.log(" setInfoLabelText(String message)", infoLabel.getText());

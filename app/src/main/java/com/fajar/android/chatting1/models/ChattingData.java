@@ -1,5 +1,6 @@
 package com.fajar.android.chatting1.models;
 
+import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 
@@ -23,6 +24,7 @@ public class ChattingData implements Serializable {
     private int unreadMessages;
     public void addUnreadMessage(){
         setUnreadMessages(unreadMessages+1);
+        Logs.log("addUnreadMessage: ", unreadMessages);
     }
     public void removeUnreadMessage(){
         setUnreadMessages(0);
