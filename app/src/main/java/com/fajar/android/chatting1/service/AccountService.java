@@ -34,6 +34,7 @@ public class AccountService {
                     WebResponse.class);
             WebResponse response =  responseEntity.getBody();
             Logs.log("get user: ", response.getRegisteredRequest());
+            Logs.log("Get User response: ", response);
             return response;
         }catch ( Exception ex){
             Logs.log("ERROR getUser: ", ex);

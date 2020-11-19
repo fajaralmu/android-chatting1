@@ -58,18 +58,7 @@ public class ChattingListFragmentHandler extends BaseHandler<ChattingListFragmen
                 Logs.log("onPostExecute getChattingPartnersTask");
 
                 //convert data type from Map to RegisteredRequest.class
-                if(null != webResponse && webResponse.getResultList().size() > 0){
-                    List results = webResponse.getResultList();
-                    List<RegisteredRequest> partners = new ArrayList<>();
-                    for (Object result :
-                            results) {
-                        if (result instanceof Map){
-                            RegisteredRequest registeredRequest = MapUtil.mapToObject((Map) result, RegisteredRequest.class);
-                            partners.add(registeredRequest);
-                        }
-                    }
-                    webResponse.setResultList(partners);
-                }
+
 
                 callback.accept(webResponse, exception);
             }

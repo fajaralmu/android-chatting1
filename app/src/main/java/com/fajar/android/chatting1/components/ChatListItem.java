@@ -15,9 +15,9 @@ import android.widget.TextView;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
-import com.fajar.android.chatting1.models.ChattingData;
 import com.fajar.android.chatting1.service.ImageViewWithURL;
 import com.fajar.android.chatting1.util.Logs;
+import com.fajar.livestreaming.dto.ChattingData;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 
 import java.util.Date;

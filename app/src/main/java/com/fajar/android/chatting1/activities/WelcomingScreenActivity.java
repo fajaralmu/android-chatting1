@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fajar.android.chatting1.constants.Extras;
 import com.fajar.android.chatting1.handlers.MyConsumer;
@@ -19,6 +20,7 @@ import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.android.chatting1.util.Navigate;
 import com.fajar.android.chatting1.R;
+import com.fajar.livestreaming.dto.ChattingData;
 import com.fajar.livestreaming.dto.WebResponse;
 
 public class WelcomingScreenActivity extends BaseActivity {
@@ -129,7 +131,7 @@ public class WelcomingScreenActivity extends BaseActivity {
             return;
         }
 
-        SharedPreferenceUtil.putSessionData(sharedpreferences, response);
+        updateSession(response);
         goToHomePage();
     }
 
@@ -141,8 +143,21 @@ public class WelcomingScreenActivity extends BaseActivity {
             return;
         }
         SharedPreferenceUtil.putRequestKey(sharedpreferences, response.getMessage());
-        SharedPreferenceUtil.putSessionData(sharedpreferences, response);
+        updateSession(response);
         goToHomePage();
+    }
+
+    private void updateSession(WebResponse response) {
+        SharedPreferenceUtil.putSessionData(sharedpreferences, response);
+        SharedPreferenceUtil.putChattingPartnersData(sharedpreferences, response);
+        List<ChattingData> chattingDataList = response.getChattingDataList();
+        for(ChattingData chattingData:chattingDataList){
+            try {
+               SharedPreferenceUtil.setChattingData(sharedpreferences, chattingData.getPartner().getRequestId(), chattingData);
+            }catch (Exception ex){
+                Logs.log("ERROR SET chattingData:",ex);
+            }
+        }
     }
 
     private AsyncTask<String, Void, WebResponse> getUser() {

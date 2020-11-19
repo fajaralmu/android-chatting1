@@ -85,10 +85,6 @@ public class ChattingService {
             ResponseEntity<WebResponse> responseEntity = Commons.getRestTemplate().exchange(endPoint, HttpMethod.POST, Commons.httpEntityWithRequestKey(null, requestKey),
                     WebResponse.class);
             WebResponse response = responseEntity.getBody();
-            if(response.getResultList().size()>0){
-                Object listItem = response.getResultList().get(0);
-                Logs.log(listItem.getClass());
-            }
             Logs.log("SUCCESS getChattingPartners");
             return response;
         }catch ( Exception ex){

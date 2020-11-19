@@ -2,7 +2,7 @@ package com.fajar.android.chatting1.service;
 
 import android.content.SharedPreferences;
 
-import com.fajar.android.chatting1.models.ChattingData;
+import com.fajar.livestreaming.dto.ChattingData;
 import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
@@ -23,23 +23,12 @@ public class SharedPreferenceUtil {
 
     public static WebResponse getChattingPartnersData(SharedPreferences sharedPreferences) {
         WebResponse webResponse = getObject(sharedPreferences, "chatting_partners", WebResponse.class);
-        if (null != webResponse && webResponse.getResultList().size() > 0) {
-            List results = webResponse.getResultList();
-            List<RegisteredRequest> partners = new ArrayList<>();
-            for (Object result :
-                    results) {
-                if (result instanceof Map) {
-                    RegisteredRequest registeredRequest = MapUtil.mapToObject((Map) result, RegisteredRequest.class);
-                    partners.add(registeredRequest);
-                }
-            }
-            webResponse.setResultList(partners);
-        }
+
         return webResponse;
     }
 
     public static void putChattingPartnersData(SharedPreferences sharedPreferences, WebResponse data) {
-        putObject(sharedPreferences, "chatting_partners", data);
+        putObject(sharedPreferences, "chatting_partners", WebResponse.builder().chattingPartnerList(data.getChattingPartnerList()).build());
     }
 
     public static String getValue(SharedPreferences sharedPreferences, String key) {
@@ -126,13 +115,7 @@ public class SharedPreferenceUtil {
     public static void setChattingData(SharedPreferences sharedPreferences, RegisteredRequest partner, WebResponse webResponse) {
         ChattingData chattingData = new ChattingData();
         chattingData.setPartner(partner);
-        for (Object message : webResponse.getResultList()) {
-            try {
-                chattingData.addMessage((Message) message);
-            } catch (Exception e) {
-
-            }
-        }
+        chattingData.setMessages(webResponse.getMessageList());
         putObject(sharedPreferences, "chatting_data_" + partner.getRequestId(), chattingData);
     }
 
@@ -163,7 +146,7 @@ public class SharedPreferenceUtil {
     }
 
     public static void addChattingMessage(SharedPreferences sharedPreferences, String partnerId, Message message, boolean unread) {
-        Logs.log("addChattingMessage partnerId: ",partnerId, "unread: ", unread);
+        Logs.log("addChattingMessage partnerId: ", partnerId, "unread: ", unread);
         RegisteredRequest partner = getChattingPartner(sharedPreferences, partnerId);
         addChattingMessage(sharedPreferences, partner, message, unread);
 
@@ -180,13 +163,12 @@ public class SharedPreferenceUtil {
 
     public static RegisteredRequest getChattingPartner(SharedPreferences sharedPreferences, String partnerId) {
         WebResponse response = getChattingPartnersData(sharedPreferences);
-        for (Object object : response.getResultList()) {
-            if (object instanceof RegisteredRequest) {
-                RegisteredRequest partner = (RegisteredRequest) object;
-                if (partnerId.equals(partner.getRequestId())) {
-                    return partner;
-                }
+        for (RegisteredRequest partner : response.getChattingPartnerList()) {
+
+            if (partnerId.equals(partner.getRequestId())) {
+                return partner;
             }
+
         }
 
         return null;

@@ -58,20 +58,6 @@ public class ChatRoomFragmentHandler extends BaseHandler<ChatRoomFragment> {
                 //     stopLoading();
                 Logs.log("onPostExecute getChattingMessagesTask");
 
-                //convert data type from Map to RegisteredRequest.class
-                if(null != webResponse && webResponse.getResultList().size() > 0){
-                    List results = webResponse.getResultList();
-                    List<Message> partners = new ArrayList<>();
-                    for (Object result :
-                            results) {
-                        if (result instanceof Map){
-                            Message message = MapUtil.mapToObject((Map) result, Message.class);
-                            partners.add(message);
-                        }
-                    }
-                    webResponse.setResultList(partners);
-                }
-
                 callback.accept(webResponse, exception);
             }
         };

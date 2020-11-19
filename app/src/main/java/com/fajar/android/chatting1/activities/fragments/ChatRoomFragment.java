@@ -14,9 +14,9 @@ import android.widget.ScrollView;
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.components.ChatMessageItem;
 import com.fajar.android.chatting1.handlers.ChatRoomFragmentHandler;
-import com.fajar.android.chatting1.models.ChattingData;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.Logs;
+import com.fajar.livestreaming.dto.ChattingData;
 import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
@@ -73,15 +73,14 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         }
 
         SharedPreferenceUtil.setChattingData(sharedpreferences, partner, response);
-        populateMessages(response.getResultList());
+        populateMessages(response.getMessageList());
         scrollToDowm();
     }
 
-    private void populateMessages(List messages) {
+    private void populateMessages(List<Message> messages) {
         messagesLayout.removeAllViews();
-        for (Object message :
-                messages) {
-            ChatMessageItem chatMessageItem = new ChatMessageItem((Message) message, getActivity(), myAccount, partner);
+        for (Message message : messages) {
+            ChatMessageItem chatMessageItem = new ChatMessageItem( message, getActivity(), myAccount, partner);
             messagesLayout.addView(chatMessageItem);
         }
     }
@@ -121,6 +120,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
             return;
         }
         chattingData.setUnreadMessages(0);
+        Logs.log("chattingData COUNT:", chattingData.getMessages().size());
         SharedPreferenceUtil.setChattingData(sharedpreferences, partner.getRequestId(), chattingData);
         populateMessages(chattingData.getMessages());
     }

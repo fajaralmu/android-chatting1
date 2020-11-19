@@ -1,15 +1,8 @@
 package com.fajar.android.chatting1.activities.fragments;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.media.Image;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fajar.android.chatting1.R;
-import com.fajar.android.chatting1.activities.HomeActivity;
 import com.fajar.android.chatting1.components.ChatListItem;
 import com.fajar.android.chatting1.constants.Actions;
-import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.ChattingListFragmentHandler;
-import com.fajar.android.chatting1.models.ChattingData;
+import com.fajar.livestreaming.dto.ChattingData;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
@@ -150,22 +141,21 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
 
     private void populateChattingPartners(WebResponse response) {
         chattingListLayout.removeAllViews();
-        if (response.getResultList().size() == 0) {
+        if (response.getChattingPartnerList().size() == 0) {
             showInfoEmpty();
             SharedPreferenceUtil.removeChattingPartnersData(sharedpreferences);
             return;
         }
         SharedPreferenceUtil.putChattingPartnersData(sharedpreferences, response);
 
-        List partners = response.getResultList();
+        List<RegisteredRequest> partners = response.getChattingPartnerList();
         populateChattingListLayout(partners);
 
     }
 
-    private void populateChattingListLayout(List partners) {
-        for (Object object :
+    private void populateChattingListLayout(List<RegisteredRequest> partners) {
+        for (RegisteredRequest partner :
                 partners) {
-            RegisteredRequest partner = (RegisteredRequest) object;
             ChattingData chattingData = SharedPreferenceUtil.getChattingData(sharedpreferences, partner.getRequestId());
             ChatListItem chatListItem = new ChatListItem((RegisteredRequest) partner, false, getActivity(), chattingData);
             chattingListLayout.addView(chatListItem);

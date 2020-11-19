@@ -236,6 +236,11 @@ public class HomeActivity extends FragmentActivity {
         return nextAction;
     }
 
+    public BaseFragment getCurrentFragment(){
+        return currentFragment;
+    }
+
+
     public void enterChatRoom(RegisteredRequest partner) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         try {
@@ -248,7 +253,6 @@ public class HomeActivity extends FragmentActivity {
     }
 
     ////////////// WEBSOCKET HANDLERS //////////////////////
-
     public void showNewChatMessage(WebResponse response) {
         Logs.log("Websocket HANDLE showNewChatMessage");
         final Message chatMessage = response.getChatMessage();
@@ -284,18 +288,15 @@ public class HomeActivity extends FragmentActivity {
     }
 
     private boolean isPartnerExist(String partnerId) {
-        WebResponse chattingData = SharedPreferenceUtil.getChattingPartnersData(sharedPreferences);
-        if (chattingData != null && chattingData.getResultList() != null) {
-            List partners = chattingData.getResultList();
-            for (Object partner :
-                    partners) {
+        WebResponse partnersData = SharedPreferenceUtil.getChattingPartnersData(sharedPreferences);
+        if (partnersData != null && partnersData.getChattingPartnerList() != null) {
+            List<RegisteredRequest> partners = partnersData.getChattingPartnerList();
+            for (RegisteredRequest partner :  partners) {
                 try {
-                    if (((RegisteredRequest) partner).getRequestId().equals(partnerId)) {
+                    if (partner.getRequestId().equals(partnerId)) {
                         return true;
                     }
-                } catch (Exception e) {
-                    //
-                }
+                } catch (Exception e) { }
             }
         }
         return false;
