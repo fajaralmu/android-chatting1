@@ -271,7 +271,6 @@ public class HomeActivity extends FragmentActivity {
     }
 
     public Date getWebsocketConnectedAt() {
-        Logs.log("websocketConnectedAt: ", websocketConnectedAt);
         return websocketConnectedAt;
     }
 

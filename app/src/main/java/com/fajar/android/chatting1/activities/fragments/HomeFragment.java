@@ -101,14 +101,12 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
 
     public void updateWebsocketConnectionInfo(){
         boolean connected = (SharedPreferenceUtil.isWebsocketConnected(sharedpreferences));
-        Logs.log("updateWebsocketConnectionInfo:", connected);
         try {
             componentHandler.postDelayed(()-> {
                 labelWebsocketConnectionStatus.setText("WebSocket Connection:" + (connected ? "Connected" : "Disconnected"));
                 if(getActivity() instanceof  HomeActivity) {
                     Date connectedDate = ((HomeActivity) getActivity()).getWebsocketConnectedAt();
-                    Logs.log("connectedDate: ", connectedDate);
-                    labelWebsocketUpdatedDate.setText("updated at " + connectedDate);
+                    labelWebsocketUpdatedDate.setText("updated at " + (connectedDate == null ? "-":connectedDate.toString()));
                 } else {
                     Logs.log("Current activity not instanceof HomeActivity: ", getActivity().getClass());
                 }
