@@ -1,6 +1,10 @@
 package com.fajar.android.chatting1.activities.fragments;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,7 +42,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
-
         return view;
     }
 
@@ -61,6 +64,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
         buttonResetWebsocket = findById(R.id.button_refresh_websocket_connection);
         buttonInvalidate = findById(R.id.button_invalidate);
         loader = findById(R.id.loader_home_fragment);
+
     }
 
     private void initEvents() {
@@ -73,7 +77,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
             WebResponse sessionData = SharedPreferenceUtil.getSessionData(sharedpreferences);
             populateSessionData(sessionData);
         } else {
-            goToWelcomingScreen();
+            relaunchApp();
         }
 
 
@@ -89,9 +93,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
                     SharedPreferenceUtil.setWebsocketConnected(sharedpreferences, false);
                     updateWebsocketConnectionInfo();
                     ((HomeActivity) getActivity()).initializeWebsocket();
-                }catch (Exception e){
-
-                }
+                }catch (Exception e){  }
             }
         });
     }
@@ -105,11 +107,14 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
                 labelWebsocketConnectionStatus.setText("WebSocket Connection:" + (connected ? "Connected" : "Disconnected"));
                 if(getActivity() instanceof  HomeActivity) {
                     Date connectedDate = ((HomeActivity) getActivity()).getWebsocketConnectedAt();
+                    Logs.log("connectedDate: ", connectedDate);
                     labelWebsocketUpdatedDate.setText("updated at " + connectedDate);
-                } else { }
+                } else {
+                    Logs.log("Current activity not instanceof HomeActivity: ", getActivity().getClass());
+                }
                 Logs.log("labelWebsocketConnectionStatus : ", labelWebsocketConnectionStatus.getText());
 
-            }, 100);
+            }, 1);
         }catch (Exception e){
 
         }
@@ -135,7 +140,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
                 if (e != null) {
                     buttonPanels.setVisibility(View.VISIBLE);
                 } else {
-                    goToWelcomingScreen();
+                    relaunchApp();
                     SharedPreferenceUtil.removeChattingPartnersData(sharedpreferences);
                 }
             }
@@ -143,8 +148,13 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     }
 
 
-    private void goToWelcomingScreen() {
-        Navigate.navigate(getActivity(), WelcomingScreenActivity.class);
+    private void relaunchApp() {
+        Intent mStartActivity = new Intent(getActivity(), WelcomingScreenActivity.class);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(getActivity(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
     }
 
     private void populateSessionData(WebResponse sessionData) {

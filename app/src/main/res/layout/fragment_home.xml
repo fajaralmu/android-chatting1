@@ -120,6 +120,7 @@
                 android:paddingRight="10dp"
                 android:text="Reset Connection"
                 android:textColor="@android:color/background_light" />
+
         </LinearLayout>
 
         <ProgressBar

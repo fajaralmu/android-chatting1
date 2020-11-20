@@ -1,5 +1,6 @@
 package com.fajar.android.chatting1.activities;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -56,6 +57,10 @@ public class HomeActivity extends FragmentActivity {
 
     private Date websocketConnectedAt;
 
+    public HomeActivity(){
+        Logs.log("HomeActivity CONSTRUCTED");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,17 +70,19 @@ public class HomeActivity extends FragmentActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         sharedPreferences = getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, Context.MODE_PRIVATE);
         StrictMode.setThreadPolicy(policy);
-        Logs.log("ONCREATE....");
+
         setContentView(R.layout.activity_home);
         initComponent();
         initEvent();
 
+        Logs.log("HomeActivity ONCREATE....");
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         switchFragment(R.layout.fragment_home);
         super.onPostCreate(savedInstanceState);
+
     }
 
     protected void initComponent() {
@@ -258,6 +265,16 @@ public class HomeActivity extends FragmentActivity {
         }
     }
 
+
+    public void setWebsocketConnectedAt(Date websocketConnectedAt) {
+        this.websocketConnectedAt = websocketConnectedAt;
+    }
+
+    public Date getWebsocketConnectedAt() {
+        Logs.log("websocketConnectedAt: ", websocketConnectedAt);
+        return websocketConnectedAt;
+    }
+
     ////////////// WEBSOCKET HANDLERS //////////////////////
     public void showNewChatMessage(WebResponse response) {
         Logs.log("Websocket HANDLE showNewChatMessage");
@@ -308,23 +325,14 @@ public class HomeActivity extends FragmentActivity {
         return false;
     }
 
-    public void setWebsocketConnectedAt(Date websocketConnectedAt) {
-        this.websocketConnectedAt = websocketConnectedAt;
-    }
 
-    public Date getWebsocketConnectedAt() {
-        return websocketConnectedAt;
-    }
 
     public void onConnectedWebsocket() {
         SharedPreferenceUtil.setWebsocketConnected(sharedPreferences, true);
         setWebsocketConnectedAt(new Date());
         Logs.log("HOME ACTIVITY onConnectedWebsocket currentFragment: ", currentFragment == null ? "":currentFragment.getClass());
         if(currentFragment instanceof HomeFragment){
-            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-//
-//            Logs.log("HomeFragment.updateWebsocketConnectionInfo");
-//            ((HomeFragment) currentFragment).updateWebsocketConnectionInfo();
+            ((HomeFragment) currentFragment).updateWebsocketConnectionInfo();
         }
     }
 }
