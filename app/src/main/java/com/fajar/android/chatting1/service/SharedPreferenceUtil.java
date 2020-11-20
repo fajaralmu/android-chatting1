@@ -2,6 +2,7 @@ package com.fajar.android.chatting1.service;
 
 import android.content.SharedPreferences;
 
+import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.ChattingData;
 import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.RegisteredRequest;
@@ -10,12 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import com.fajar.android.chatting1.util.Logs;
-import com.fajar.android.chatting1.util.MapUtil;
 
 public class SharedPreferenceUtil {
     private static ObjectMapper objectMapper = new ObjectMapper();

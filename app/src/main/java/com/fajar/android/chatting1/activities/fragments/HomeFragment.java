@@ -1,8 +1,6 @@
 package com.fajar.android.chatting1.activities.fragments;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,14 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
 import com.fajar.android.chatting1.activities.WelcomingScreenActivity;
-import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.HomeFragmentHandler;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
@@ -42,9 +38,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        setSharedpreferences();
-        initComponents();
-        initEvents();
+
         return view;
     }
 
@@ -52,6 +46,9 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+        setSharedpreferences();
+        initComponents();
+        initEvents();
     }
 
     private void initComponents() {
@@ -79,8 +76,8 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
             goToWelcomingScreen();
         }
 
-        boolean connected = (SharedPreferenceUtil.isWebsocketConnected(sharedpreferences));
-        updateWebsocketConnectionInfo(connected);
+
+        updateWebsocketConnectionInfo();
 
     }
 
@@ -89,6 +86,8 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try{
+                    SharedPreferenceUtil.setWebsocketConnected(sharedpreferences, false);
+                    updateWebsocketConnectionInfo();
                     ((HomeActivity) getActivity()).initializeWebsocket();
                 }catch (Exception e){
 
@@ -97,12 +96,20 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
         });
     }
 
-    public void updateWebsocketConnectionInfo(boolean connected){
+
+    public void updateWebsocketConnectionInfo(){
+        boolean connected = (SharedPreferenceUtil.isWebsocketConnected(sharedpreferences));
+        Logs.log("updateWebsocketConnectionInfo:", connected);
         try {
-            getActivity().runOnUiThread(()-> {
+            componentHandler.postDelayed(()-> {
                 labelWebsocketConnectionStatus.setText("WebSocket Connection:" + (connected ? "Connected" : "Disconnected"));
-                labelWebsocketUpdatedDate.setText("updated at "+new Date());
-            });
+                if(getActivity() instanceof  HomeActivity) {
+                    Date connectedDate = ((HomeActivity) getActivity()).getWebsocketConnectedAt();
+                    labelWebsocketUpdatedDate.setText("updated at " + connectedDate);
+                } else { }
+                Logs.log("labelWebsocketConnectionStatus : ", labelWebsocketConnectionStatus.getText());
+
+            }, 100);
         }catch (Exception e){
 
         }

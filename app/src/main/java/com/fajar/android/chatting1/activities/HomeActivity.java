@@ -3,6 +3,8 @@ package com.fajar.android.chatting1.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,12 +12,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import java.util.List;
-
+import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.fragments.BaseFragment;
 import com.fajar.android.chatting1.activities.fragments.ChatRoomFragment;
 import com.fajar.android.chatting1.activities.fragments.ChattingListFragment;
@@ -29,13 +29,16 @@ import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.android.chatting1.util.Navigate;
-import com.fajar.android.chatting1.R;
 import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import static android.view.View.*;
+import java.util.Date;
+import java.util.List;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public class HomeActivity extends FragmentActivity {
 
@@ -46,10 +49,12 @@ public class HomeActivity extends FragmentActivity {
     private BottomNavigationView bottomNavigationView;
     private TextView breadCumb;
     private BaseFragment currentFragment;
-
+    private Handler mHandler = new Handler();
 
     private SharedPreferences sharedPreferences;
     private GeneralApplicationHandler handler;
+
+    private Date websocketConnectedAt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +101,10 @@ public class HomeActivity extends FragmentActivity {
     }
 
     public void initializeWebsocket() {
+        SharedPreferenceUtil.setWebsocketConnected(sharedPreferences, false);
         handler.initializeWebsocket(SharedPreferenceUtil.getSessionData(sharedPreferences).getRegisteredRequest());
     }
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener() {
         return new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -191,6 +198,7 @@ public class HomeActivity extends FragmentActivity {
     public void setCurrentFragment(BaseFragment currentFragment) {
         this.currentFragment = currentFragment;
     }
+
 
     public void setCurrentFragmentId(int currentFragmentId) {
         this.currentFragmentId = currentFragmentId;
@@ -300,10 +308,23 @@ public class HomeActivity extends FragmentActivity {
         return false;
     }
 
+    public void setWebsocketConnectedAt(Date websocketConnectedAt) {
+        this.websocketConnectedAt = websocketConnectedAt;
+    }
+
+    public Date getWebsocketConnectedAt() {
+        return websocketConnectedAt;
+    }
+
     public void onConnectedWebsocket() {
         SharedPreferenceUtil.setWebsocketConnected(sharedPreferences, true);
+        setWebsocketConnectedAt(new Date());
+        Logs.log("HOME ACTIVITY onConnectedWebsocket currentFragment: ", currentFragment == null ? "":currentFragment.getClass());
         if(currentFragment instanceof HomeFragment){
-            ((HomeFragment) currentFragment).updateWebsocketConnectionInfo(true);
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+//
+//            Logs.log("HomeFragment.updateWebsocketConnectionInfo");
+//            ((HomeFragment) currentFragment).updateWebsocketConnectionInfo();
         }
     }
 }

@@ -1,12 +1,12 @@
 package com.fajar.android.chatting1.service;
 
+import com.fajar.android.chatting1.util.Logs;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
 import java.io.IOException;
-
-import com.fajar.android.chatting1.util.Logs;
 
 class CustomErrorHandler implements ResponseErrorHandler {
     @Override

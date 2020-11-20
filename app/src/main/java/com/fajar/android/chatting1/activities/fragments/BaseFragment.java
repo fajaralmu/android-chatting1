@@ -3,13 +3,12 @@ package com.fajar.android.chatting1.activities.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-
-import java.util.HashMap;
 
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
@@ -18,6 +17,8 @@ import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.handlers.BaseHandler;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.Logs;
+
+import java.util.HashMap;
 
 public class BaseFragment<H extends  BaseHandler> extends Fragment {
     private static HashMap<Integer, Class> customFragments = initCustomFragments();
@@ -29,6 +30,7 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
     protected H handler;
     protected ProgressBar loader;
     protected Actions initialAction = Actions.NONE;
+    protected Handler componentHandler = new Handler();
 
     public BaseFragment() {
     }

@@ -11,10 +11,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.fajar.android.chatting1.util.Logs;
 
 import java.io.InputStream;
-
-import com.fajar.android.chatting1.util.Logs;
 
 public class ImageViewWithURL {
 

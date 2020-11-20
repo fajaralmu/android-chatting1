@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fajar.android.chatting1.R;
-
 import com.fajar.android.chatting1.util.Logs;
 
 public class ImageLabel extends ConstraintLayout {

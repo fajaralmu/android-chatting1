@@ -2,7 +2,6 @@ package com.fajar.android.chatting1.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -10,19 +9,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import java.io.Serializable;
-import java.util.List;
-
+import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.constants.Extras;
-import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.service.AccountService;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.android.chatting1.util.Navigate;
-import com.fajar.android.chatting1.R;
 import com.fajar.livestreaming.dto.ChattingData;
 import com.fajar.livestreaming.dto.WebResponse;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class WelcomingScreenActivity extends BaseActivity {
 
@@ -69,7 +67,7 @@ public class WelcomingScreenActivity extends BaseActivity {
 
     @Override
     protected void initEvent() {
-        SharedPreferenceUtil.setWebsocketConnected(sharedPreferences, false);
+
         registerForm.setVisibility(View.GONE);
         buttonRegister.setOnClickListener(this::register);
 

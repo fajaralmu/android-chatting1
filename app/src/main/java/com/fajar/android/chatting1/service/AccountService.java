@@ -4,8 +4,6 @@ import com.fajar.android.chatting1.constants.Endpoints;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.WebRequest;
 import com.fajar.livestreaming.dto.WebResponse;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

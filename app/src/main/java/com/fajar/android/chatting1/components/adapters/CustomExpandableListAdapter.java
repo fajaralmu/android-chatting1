@@ -8,12 +8,12 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import com.fajar.android.chatting1.R;
-import com.fajar.android.chatting1.util.Dimension;
 import com.fajar.android.chatting1.models.ListChildInfo;
 import com.fajar.android.chatting1.models.ListGroupInfo;
+import com.fajar.android.chatting1.util.Dimension;
+
+import java.util.ArrayList;
 
 public class CustomExpandableListAdapter<T> extends BaseExpandableListAdapter {
     private Context context;

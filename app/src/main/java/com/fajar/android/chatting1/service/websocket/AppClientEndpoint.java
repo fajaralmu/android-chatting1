@@ -1,13 +1,11 @@
 package com.fajar.android.chatting1.service.websocket;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 
 import com.fajar.android.chatting1.handlers.MyConsumer;
 import com.fajar.android.chatting1.service.Commons;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.android.chatting1.util.MessageMapper;
-import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.WebResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -27,8 +25,6 @@ import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
-
-import io.netty.util.internal.StringUtil;
 
 @ClientEndpoint
 public class AppClientEndpoint /*extends Endpoint */ {

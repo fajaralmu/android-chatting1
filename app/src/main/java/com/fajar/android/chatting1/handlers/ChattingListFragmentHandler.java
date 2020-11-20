@@ -3,17 +3,9 @@ package com.fajar.android.chatting1.handlers;
 import android.os.AsyncTask;
 
 import com.fajar.android.chatting1.activities.fragments.ChattingListFragment;
-import com.fajar.android.chatting1.activities.fragments.HomeFragment;
-import com.fajar.android.chatting1.service.AccountService;
 import com.fajar.android.chatting1.service.ChattingService;
 import com.fajar.android.chatting1.util.Logs;
-import com.fajar.android.chatting1.util.MapUtil;
-import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 public class ChattingListFragmentHandler extends BaseHandler<ChattingListFragment> {

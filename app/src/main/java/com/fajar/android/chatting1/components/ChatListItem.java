@@ -2,9 +2,7 @@ package com.fajar.android.chatting1.components;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 import com.fajar.android.chatting1.R;
 import com.fajar.android.chatting1.activities.HomeActivity;
 import com.fajar.android.chatting1.service.ImageViewWithURL;
-import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.ChattingData;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 

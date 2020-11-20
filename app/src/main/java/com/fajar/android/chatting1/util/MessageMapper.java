@@ -1,13 +1,9 @@
 package com.fajar.android.chatting1.util;
 
-import java.util.Date;
-
-
 import com.fajar.android.chatting1.service.Commons;
 import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.WebResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MessageMapper {
 

@@ -7,9 +7,7 @@ import com.fajar.android.chatting1.service.Commons;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.android.chatting1.util.StringUtil;
 import com.fajar.android.chatting1.util.ThreadUtil;
-import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.RegisteredRequest;
-import com.fajar.livestreaming.dto.WebRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 

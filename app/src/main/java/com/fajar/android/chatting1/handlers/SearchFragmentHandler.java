@@ -2,9 +2,7 @@ package com.fajar.android.chatting1.handlers;
 
 import android.os.AsyncTask;
 
-import com.fajar.android.chatting1.activities.fragments.HomeFragment;
 import com.fajar.android.chatting1.activities.fragments.SearchFragment;
-import com.fajar.android.chatting1.service.AccountService;
 import com.fajar.android.chatting1.service.ChattingService;
 import com.fajar.android.chatting1.util.Logs;
 import com.fajar.livestreaming.dto.WebResponse;
