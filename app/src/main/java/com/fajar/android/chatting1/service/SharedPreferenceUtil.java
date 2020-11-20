@@ -58,6 +58,15 @@ public class SharedPreferenceUtil {
         }
     }
 
+    public static void setWebsocketConnected(SharedPreferences sharedPreferences, boolean connected){
+        putString(sharedPreferences, "websocket_connection", String.valueOf(connected));
+    }
+
+    public static boolean isWebsocketConnected(SharedPreferences sharedPreferences){
+        String value = getValue(sharedPreferences, "websocket_connection");
+        return value.equals("true");
+    }
+
     /**
      * put to shared reference, null value will remove key
      *
@@ -66,6 +75,7 @@ public class SharedPreferenceUtil {
      * @param value
      */
     public static void putString(SharedPreferences sharedPreferences, String key, String value) {
+        if(null == sharedPreferences){ return; }
         // ThreadUtil.runAndStart(() -> {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (null == key) {//|| key.isEmpty()) {

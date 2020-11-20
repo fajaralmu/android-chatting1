@@ -3,7 +3,6 @@ package com.fajar.android.chatting1.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,17 +14,16 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.fajar.android.chatting1.activities.fragments.BaseFragment;
 import com.fajar.android.chatting1.activities.fragments.ChatRoomFragment;
 import com.fajar.android.chatting1.activities.fragments.ChattingListFragment;
+import com.fajar.android.chatting1.activities.fragments.HomeFragment;
 import com.fajar.android.chatting1.constants.Actions;
 import com.fajar.android.chatting1.constants.Extras;
 import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
-import com.fajar.android.chatting1.handlers.HomeActivityHandler;
+import com.fajar.android.chatting1.handlers.GeneralApplicationHandler;
 import com.fajar.android.chatting1.service.Commons;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
@@ -51,13 +49,13 @@ public class HomeActivity extends FragmentActivity {
 
 
     private SharedPreferences sharedPreferences;
-    private HomeActivityHandler handler;
+    private GeneralApplicationHandler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.handler = HomeActivityHandler.instance(this);
+        this.handler = GeneralApplicationHandler.instance(this);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         sharedPreferences = getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, Context.MODE_PRIVATE);
@@ -97,7 +95,7 @@ public class HomeActivity extends FragmentActivity {
         initializeWebsocket();
     }
 
-    private void initializeWebsocket() {
+    public void initializeWebsocket() {
         handler.initializeWebsocket(SharedPreferenceUtil.getSessionData(sharedPreferences).getRegisteredRequest());
     }
 
@@ -300,5 +298,12 @@ public class HomeActivity extends FragmentActivity {
             }
         }
         return false;
+    }
+
+    public void onConnectedWebsocket() {
+        SharedPreferenceUtil.setWebsocketConnected(sharedPreferences, true);
+        if(currentFragment instanceof HomeFragment){
+            ((HomeFragment) currentFragment).updateWebsocketConnectionInfo(true);
+        }
     }
 }

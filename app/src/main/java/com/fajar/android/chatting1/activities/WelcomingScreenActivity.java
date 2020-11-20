@@ -2,6 +2,7 @@ package com.fajar.android.chatting1.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +14,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fajar.android.chatting1.constants.Extras;
-import com.fajar.android.chatting1.handlers.MyConsumer;
+import com.fajar.android.chatting1.constants.SharedPreferencesConstants;
 import com.fajar.android.chatting1.service.AccountService;
 import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.AlertUtil;
@@ -37,6 +38,7 @@ public class WelcomingScreenActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkIntentExras();
+
         new ShowSplashTask().execute(this);
     }
 
@@ -67,6 +69,7 @@ public class WelcomingScreenActivity extends BaseActivity {
 
     @Override
     protected void initEvent() {
+        SharedPreferenceUtil.setWebsocketConnected(sharedPreferences, false);
         registerForm.setVisibility(View.GONE);
         buttonRegister.setOnClickListener(this::register);
 
@@ -80,7 +83,7 @@ public class WelcomingScreenActivity extends BaseActivity {
     }
 
     private void checkUser() {
-        String existingRequestKey = SharedPreferenceUtil.getRequestKey(sharedpreferences);
+        String existingRequestKey = SharedPreferenceUtil.getRequestKey(sharedPreferences);
         if (existingRequestKey.isEmpty()) {
             stopLoading();
             registerForm.setVisibility(View.VISIBLE);
@@ -142,18 +145,18 @@ public class WelcomingScreenActivity extends BaseActivity {
             stopLoading();
             return;
         }
-        SharedPreferenceUtil.putRequestKey(sharedpreferences, response.getMessage());
+        SharedPreferenceUtil.putRequestKey(sharedPreferences, response.getMessage());
         updateSession(response);
         goToHomePage();
     }
 
     private void updateSession(WebResponse response) {
-        SharedPreferenceUtil.putSessionData(sharedpreferences, response);
-        SharedPreferenceUtil.putChattingPartnersData(sharedpreferences, response);
+        SharedPreferenceUtil.putSessionData(sharedPreferences, response);
+        SharedPreferenceUtil.putChattingPartnersData(sharedPreferences, response);
         List<ChattingData> chattingDataList = response.getChattingDataList();
         for(ChattingData chattingData:chattingDataList){
             try {
-               SharedPreferenceUtil.setChattingData(sharedpreferences, chattingData.getPartner().getRequestId(), chattingData);
+               SharedPreferenceUtil.setChattingData(sharedPreferences, chattingData.getPartner().getRequestId(), chattingData);
             }catch (Exception ex){
                 Logs.log("ERROR SET chattingData:",ex);
             }

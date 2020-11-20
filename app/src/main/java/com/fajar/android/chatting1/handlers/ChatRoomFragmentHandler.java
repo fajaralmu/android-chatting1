@@ -2,18 +2,12 @@ package com.fajar.android.chatting1.handlers;
 
 import android.os.AsyncTask;
 
+import com.fajar.android.chatting1.activities.HomeActivity;
 import com.fajar.android.chatting1.activities.fragments.ChatRoomFragment;
-import com.fajar.android.chatting1.activities.fragments.ChattingListFragment;
 import com.fajar.android.chatting1.service.ChattingService;
 import com.fajar.android.chatting1.util.Logs;
-import com.fajar.android.chatting1.util.MapUtil;
-import com.fajar.livestreaming.dto.Message;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 public class ChatRoomFragmentHandler extends BaseHandler<ChatRoomFragment> {
@@ -21,20 +15,20 @@ public class ChatRoomFragmentHandler extends BaseHandler<ChatRoomFragment> {
     private static ChatRoomFragmentHandler instance;
 
 
-    private ChatRoomFragmentHandler(ChatRoomFragment f){
+    private ChatRoomFragmentHandler(ChatRoomFragment f) {
         super(f);
     }
 
-    public static ChatRoomFragmentHandler getInstance(ChatRoomFragment fragment){
-        if(null == instance) instance = new ChatRoomFragmentHandler(fragment);
+    public static ChatRoomFragmentHandler getInstance(ChatRoomFragment fragment) {
+        if (null == instance) instance = new ChatRoomFragmentHandler(fragment);
         return instance;
     }
 
-    public void getChattingMessages(String partnerId, String requestKey, MyConsumer<WebResponse> callback){
+    public void getChattingMessages(String partnerId, String requestKey, MyConsumer<WebResponse> callback) {
         getChattingMessagesTask(callback).execute(partnerId, requestKey);
     }
 
-    public void sendMessage(String partnerId, String requestKey, String messageBody, MyConsumer<WebResponse> callback){
+    public void sendMessage(String partnerId, String requestKey, String messageBody, MyConsumer<WebResponse> callback) {
         sendMessageTask(callback).execute(partnerId, requestKey, messageBody);
     }
 
@@ -88,4 +82,13 @@ public class ChatRoomFragmentHandler extends BaseHandler<ChatRoomFragment> {
     }
 
 
+    public void markMessageAsRead(RegisteredRequest partner) {
+        RegisteredRequest account = fragment.getMyAccount();
+        try {
+            GeneralApplicationHandler.instance((HomeActivity) fragment.getActivity()).markMessageAsRead(account, partner);
+
+        } catch (Exception e) {
+            Logs.log("error markMessageAsRead: ", e);
+        }
+    }
 }

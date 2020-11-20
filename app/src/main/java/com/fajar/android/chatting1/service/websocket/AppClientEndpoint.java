@@ -114,17 +114,19 @@ public class AppClientEndpoint /*extends Endpoint */ {
 
     }
 
-    private String sockJsPayload(String message, String destination) {
-        String payload = MessageMapper.constructMessage(getClientId(), destination, message);
+    private String sockJsPayload(String payload, String destination) {
+       // String payload = MessageMapper.constructMessage(getClientId(), destination, message);
         try {
             payload = Commons.getObjectMapper().writeValueAsString(payload);
             payload = normalize(payload);
         } catch (JsonProcessingException ex) {
             Logger.getLogger(AppClientEndpoint.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        if(destination.startsWith("/") == false){
+            destination = "/"+destination;
+        }
         System.out.println("payload: " + payload);
-        String sendingTemplate = "[\"MESSAGE\\ndestination:/app/guichat\\ncontent-type:application/json;charset=UTF-8\\nsubscription:sub-0\\nmessage-id:1itomv18-933\\n\\n" + payload + "\\u0000\"]";
+        String sendingTemplate = "[\"MESSAGE\\ndestination:/app"+destination+"\\ncontent-type:application/json;charset=UTF-8\\nsubscription:sub-0\\nmessage-id:1itomv18-933\\n\\n" + payload + "\\u0000\"]";
         System.out.println("sendingTemplate: " + sendingTemplate);
         return sendingTemplate;
     }
@@ -139,9 +141,10 @@ public class AppClientEndpoint /*extends Endpoint */ {
         }
         boolean messageSent = sessionSend(payload);
         if (messageSent) {
-            callback.accept(message, null);
+            if(null != callback) {
+                callback.accept(message, null);
+            }
         }
-
     }
 
     private boolean sessionSend(String text) {

@@ -124,9 +124,19 @@ public class ChattingListFragment extends BaseFragment<ChattingListFragmentHandl
             AlertUtil.ErrorAlert(getActivity(), e);
             return;
         }
-
+        updateChattingData(response);
         populateChattingPartners(response);
+    }
 
+    private void updateChattingData(WebResponse response) {
+        List<ChattingData> chattingDataList = response.getChattingDataList();
+        for(ChattingData chattingData:chattingDataList){
+            try {
+                SharedPreferenceUtil.setChattingData(sharedpreferences, chattingData.getPartner().getRequestId(), chattingData);
+            }catch (Exception e){
+
+            }
+        }
     }
 
     private View.OnClickListener loadChattingPartnerListener() {

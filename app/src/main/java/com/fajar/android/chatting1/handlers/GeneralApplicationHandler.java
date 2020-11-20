@@ -4,23 +4,24 @@ import com.fajar.android.chatting1.activities.HomeActivity;
 import com.fajar.android.chatting1.constants.Endpoints;
 import com.fajar.android.chatting1.service.websocket.WebSocketHandler;
 import com.fajar.livestreaming.dto.RegisteredRequest;
+import com.fajar.livestreaming.dto.WebRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 
-public class HomeActivityHandler {
+public class GeneralApplicationHandler {
     final HomeActivity activity;
 
     private WebSocketHandler webSocketHandler;
 
-    private static HomeActivityHandler homeActivityHandler;
+    private static GeneralApplicationHandler instance;
 
-    public static HomeActivityHandler instance(HomeActivity homeActivity){
-        if(null == homeActivityHandler){
-            homeActivityHandler = new HomeActivityHandler(homeActivity);
+    public static GeneralApplicationHandler instance(HomeActivity homeActivity){
+        if(null == instance){
+            instance = new GeneralApplicationHandler(homeActivity);
         }
-        return homeActivityHandler;
+        return instance;
     }
 
-    private HomeActivityHandler(HomeActivity activity){
+    private GeneralApplicationHandler(HomeActivity activity){
         this.activity = activity;
     }
 
@@ -29,9 +30,21 @@ public class HomeActivityHandler {
         webSocketHandler = new WebSocketHandler(wsUrl, account);
         webSocketHandler.register();
         webSocketHandler.setNewChatMessageCallback(this::handleNewChatMessage);
+        webSocketHandler.setOnConnectCallback(this::handleOnConnect);
+    }
+
+    private void handleOnConnect(Object o, Exception e) {
+        activity.onConnectedWebsocket();
     }
 
     private void handleNewChatMessage(WebResponse response, Exception e) {
         activity.showNewChatMessage(response);
+    }
+
+    public void markMessageAsRead(RegisteredRequest account, RegisteredRequest partner){
+        WebRequest payload = new WebRequest();
+        payload.setDestination(partner.getRequestId());
+        payload.setOriginId(account.getRequestId());
+        webSocketHandler.sendMessage("/chatting/markmessageasread", payload);
     }
 }

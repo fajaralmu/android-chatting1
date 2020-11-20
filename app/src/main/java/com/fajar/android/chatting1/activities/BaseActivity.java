@@ -16,7 +16,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected final int LAYOUT_ID;
     protected ProgressBar loader;
-    protected SharedPreferences sharedpreferences;
+    protected SharedPreferences sharedPreferences;
     public BaseActivity(int layoutId){
         LAYOUT_ID = layoutId;
     }
@@ -29,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
             setContentView(LAYOUT_ID);
-            sharedpreferences = getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, MODE_PRIVATE);
+            sharedPreferences = getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, MODE_PRIVATE);
 
             initComponent();
             initEvent();

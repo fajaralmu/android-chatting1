@@ -70,15 +70,47 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/button_invalidate"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/home_button_panels"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/holo_red_dark"
-            android:text="Invalidate"
-            android:textColor="@android:color/background_light"
-            android:textSize="10sp" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/button_invalidate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/holo_red_dark"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Invalidate"
+                android:textColor="@android:color/background_light" />
+
+            <TextView
+                android:id="@+id/label_websocket_connection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="WebSocket Connection: Disconnected"
+                android:textSize="10sp" />
+
+            <Button
+                android:id="@+id/button_refresh_websocket_connection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/holo_orange_dark"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Reset Connection"
+                android:textColor="@android:color/background_light" />
+        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/loader_home_fragment"

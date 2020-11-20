@@ -1,9 +1,21 @@
 package com.fajar.android.chatting1.constants;
 
 public class Endpoints {
+    private static final boolean local =
+            true
+                    && false
+                    ;
+    static String host(){
+        if(local){
+            return  "http://"+HOST_ADDRESS+"/livestreaming/";
+        }
+        return "https://"+HOST_ADDRESS+"/";
+    }
+    public static final String HOST_LOCAL = "192.168.1.21:8080";
+    public static final String HOST_ADDRESS = local ? HOST_LOCAL : "realtime-videocall.herokuapp.com";
 
-    public static final String HOST_ADDRESS = "realtime-videocall.herokuapp.com";
-    public static final String HOST = "https://"+HOST_ADDRESS+"/";
+//    public static final String HOST = "https://"+HOST_ADDRESS+"/";
+    public static final String HOST = host();
     public static final String WS_HOST = "ws://"+HOST_ADDRESS+"/";
 //    public static final String HOST = "http://192.168.1.21:8080/livestreaming/";
     public static final String ENDPOINT_REGISTER = HOST+"api/stream/register";

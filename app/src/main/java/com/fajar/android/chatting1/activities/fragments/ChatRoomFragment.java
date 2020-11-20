@@ -75,6 +75,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         SharedPreferenceUtil.setChattingData(sharedpreferences, partner, response);
         populateMessages(response.getMessageList());
         scrollToDowm();
+        handler.markMessageAsRead(partner);
     }
 
     private void populateMessages(List<Message> messages) {
@@ -94,6 +95,10 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         scrollView = findById(R.id.chat_room_scroll);
         myAccount = SharedPreferenceUtil.getSessionData(sharedpreferences).getRegisteredRequest();
         partner = SharedPreferenceUtil.getObject(sharedpreferences, "chat_partner", RegisteredRequest.class);
+    }
+
+    public RegisteredRequest getMyAccount() {
+        return myAccount;
     }
 
     private void initEvents() {
