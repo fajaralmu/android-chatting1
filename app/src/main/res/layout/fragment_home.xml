@@ -100,6 +100,17 @@
                 android:text="WebSocket Connection: Disconnected"
                 android:textSize="10sp" />
 
+            <TextView
+                android:id="@+id/label_websocket_connection_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="updated at -"
+                android:textSize="10sp" />
+
             <Button
                 android:id="@+id/button_refresh_websocket_connection"
                 android:layout_width="match_parent"

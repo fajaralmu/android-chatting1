@@ -233,6 +233,7 @@ public class AppClientEndpoint /*extends Endpoint */ {
 
         } catch (Exception e) {
 //            MyDialog.error(e.getMessage());
+            setConnected(false);
             throw new RuntimeException(e);
 
         }

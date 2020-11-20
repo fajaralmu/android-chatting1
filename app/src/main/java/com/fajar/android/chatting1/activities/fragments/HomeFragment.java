@@ -26,9 +26,11 @@ import com.fajar.android.chatting1.util.Navigate;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 
+import java.util.Date;
+
 public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
 
-    private TextView accountName, accountId, accountRegisteredDate, labelWebsocketConnectionStatus;
+    private TextView accountName, accountId, accountRegisteredDate, labelWebsocketConnectionStatus, labelWebsocketUpdatedDate;
     private Button buttonInvalidate, buttonResetWebsocket;
     private LinearLayout buttonPanels;
 
@@ -57,6 +59,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
         accountName = findById(R.id.account_name);
         accountRegisteredDate = findById(R.id.account_date);
         labelWebsocketConnectionStatus = findById(R.id.label_websocket_connection);
+        labelWebsocketUpdatedDate = findById(R.id.label_websocket_connection_date);
         buttonPanels = findById(R.id.home_button_panels);
         buttonResetWebsocket = findById(R.id.button_refresh_websocket_connection);
         buttonInvalidate = findById(R.id.button_invalidate);
@@ -98,6 +101,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentHandler> {
         try {
             getActivity().runOnUiThread(()-> {
                 labelWebsocketConnectionStatus.setText("WebSocket Connection:" + (connected ? "Connected" : "Disconnected"));
+                labelWebsocketUpdatedDate.setText("updated at "+new Date());
             });
         }catch (Exception e){
 
