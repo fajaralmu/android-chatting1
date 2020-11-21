@@ -3,6 +3,8 @@ package com.fajar.android.chatting1.activities.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,6 +111,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         setLoaderGone();
 
         inputMessage.setText("");
+        inputMessage.addTextChangedListener(inputMessageTextChangedListener());
         buttonSendMessage.setOnClickListener(this::sendMessage);
         buttonReloadMessage.setOnClickListener((v) -> {
             loadMessages();
@@ -120,6 +123,25 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         } catch (Exception e) {
             //
         }
+    }
+
+    private TextWatcher inputMessageTextChangedListener() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                handler.sendTypingStatus(partner, true);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                handler.sendTypingStatus(partner, false);
+            }
+        };
     }
 
     private void checkStoredMessages() {

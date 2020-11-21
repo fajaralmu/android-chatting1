@@ -48,4 +48,13 @@ public class GeneralApplicationHandler {
         payload.setOriginId(account.getRequestId());
         webSocketHandler.sendMessage("/chatting/markmessageasread", payload);
     }
+
+    public void sendTypingStatus(RegisteredRequest account, RegisteredRequest partner, boolean typing){
+        WebRequest payload = new WebRequest();
+        payload.setDestination(partner.getRequestId());
+        payload.setPartnerId(partner.getRequestId());
+        payload.setOriginId(account.getRequestId());
+        payload.setTyping(typing);
+        webSocketHandler.sendMessage("/chatting/typingstatus", payload);
+    }
 }

@@ -91,4 +91,13 @@ public class ChatRoomFragmentHandler extends BaseHandler<ChatRoomFragment> {
             Logs.log("error markMessageAsRead: ", e);
         }
     }
+    public void sendTypingStatus(RegisteredRequest partner, boolean typing) {
+        RegisteredRequest account = fragment.getMyAccount();
+        try {
+            GeneralApplicationHandler.instance((HomeActivity) fragment.getActivity()).sendTypingStatus(account, partner, typing);
+
+        } catch (Exception e) {
+            Logs.log("error markMessageAsRead: ", e);
+        }
+    }
 }
