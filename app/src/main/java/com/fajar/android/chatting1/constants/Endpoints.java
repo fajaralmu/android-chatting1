@@ -7,11 +7,11 @@ public class Endpoints {
                     ;
     static String host(){
         if(local){
-            return  "http://"+HOST_ADDRESS+"/livestreaming/";
+            return  "http://"+HOST_ADDRESS+"/";
         }
         return "https://"+HOST_ADDRESS+"/";
     }
-    public static final String HOST_LOCAL = "192.168.1.21:8080";
+    public static final String HOST_LOCAL = "192.168.1.21:8080/livestreaming";
     public static final String HOST_ADDRESS = local ? HOST_LOCAL : "realtime-videocall.herokuapp.com";
 
 //    public static final String HOST = "https://"+HOST_ADDRESS+"/";

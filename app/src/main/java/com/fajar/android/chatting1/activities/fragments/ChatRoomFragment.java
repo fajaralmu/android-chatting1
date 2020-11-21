@@ -75,6 +75,10 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         SharedPreferenceUtil.setChattingData(sharedpreferences, partner, response);
         populateMessages(response.getMessageList());
         scrollToDowm();
+        markAsRead();
+    }
+
+    private void markAsRead() {
         handler.markMessageAsRead(partner);
     }
 
@@ -160,6 +164,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
             messagesLayout.addView(chatMessageItem);
 
             SharedPreferenceUtil.addChattingMessage(sharedpreferences, partner, response.getChatMessage(), false);
+            handler.markMessageAsRead(partner);
             scrollToDowm();
         });
     }

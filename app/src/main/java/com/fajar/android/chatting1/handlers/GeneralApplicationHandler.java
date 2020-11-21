@@ -44,6 +44,7 @@ public class GeneralApplicationHandler {
     public void markMessageAsRead(RegisteredRequest account, RegisteredRequest partner){
         WebRequest payload = new WebRequest();
         payload.setDestination(partner.getRequestId());
+        payload.setPartnerId(partner.getRequestId());
         payload.setOriginId(account.getRequestId());
         webSocketHandler.sendMessage("/chatting/markmessageasread", payload);
     }
