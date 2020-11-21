@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 import com.fajar.android.chatting1.activities.HomeActivity;
 import com.fajar.android.chatting1.activities.fragments.ChatRoomFragment;
 import com.fajar.android.chatting1.service.ChattingService;
+import com.fajar.android.chatting1.service.SharedPreferenceUtil;
 import com.fajar.android.chatting1.util.Logs;
+import com.fajar.livestreaming.dto.ChattingData;
 import com.fajar.livestreaming.dto.RegisteredRequest;
 import com.fajar.livestreaming.dto.WebResponse;
 
@@ -86,7 +88,11 @@ public class ChatRoomFragmentHandler extends BaseHandler<ChatRoomFragment> {
         RegisteredRequest account = fragment.getMyAccount();
         try {
             GeneralApplicationHandler.instance((HomeActivity) fragment.getActivity()).markMessageAsRead(account, partner);
-
+            Logs.log("WILL remove unread in sharedPreferences");
+            ChattingData chattingData = SharedPreferenceUtil.getChattingData(fragment.getSharedpreferences(), partner.getRequestId());
+            chattingData.removeUnreadMessage();
+            SharedPreferenceUtil.setChattingData(fragment.getSharedpreferences(), partner.getRequestId(), chattingData);
+            Logs.log("UPDATED unreadmessage in sharedPreferences");
         } catch (Exception e) {
             Logs.log("error markMessageAsRead: ", e);
         }

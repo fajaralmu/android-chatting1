@@ -174,6 +174,10 @@ public class BaseFragment<H extends  BaseHandler> extends Fragment {
         return getActivity().getSharedPreferences(SharedPreferencesConstants.SHARED_CONTENT.value, Context.MODE_PRIVATE);
     }
 
+    public SharedPreferences getSharedpreferences() {
+        return sharedpreferences;
+    }
+
     public void setSharedpreferences(){
         this.sharedpreferences = getSharedPreferences();
     }

@@ -279,15 +279,15 @@ public class HomeActivity extends FragmentActivity {
         Logs.log("Websocket HANDLE showNewChatMessage");
         final Message chatMessage = response.getChatMessage();
         runOnUiThread(() -> {
-
+            boolean insideChatRoom = false;
             if (currentFragment instanceof ChatRoomFragment) {
                 String partnerRequestId = ((ChatRoomFragment) currentFragment).getPartnerRequestId();
-                if (chatMessage.getRequestId().equals(partnerRequestId) == false) {
-                    return;
+                if (chatMessage.getRequestId().equals(partnerRequestId)) {
+                    ((ChatRoomFragment) currentFragment).appendNewChatMessage(response);
+                    insideChatRoom = true;
                 }
-                ((ChatRoomFragment) currentFragment).appendNewChatMessage(response);
-            }
-            if (currentFragment instanceof ChattingListFragment) {
+
+            } else if (currentFragment instanceof ChattingListFragment) {
                 ((ChattingListFragment) currentFragment).addUnreadMessage(chatMessage);
             }
 
@@ -303,8 +303,10 @@ public class HomeActivity extends FragmentActivity {
                 bottomNavigationView.setSelectedItemId(R.id.navigation_chatting_list);
 
             } else {
-
-                SharedPreferenceUtil.addChattingMessage(sharedPreferences, chatMessage.getRequestId(), chatMessage, true);
+                if(!insideChatRoom ||
+                        !((ChatRoomFragment) currentFragment).getPartnerRequestId().equals( chatMessage.getRequestId())) {
+                    SharedPreferenceUtil.addChattingMessage(sharedPreferences, chatMessage.getRequestId(), chatMessage, true);
+                }
             }
         });
     }

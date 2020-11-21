@@ -60,7 +60,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
         handler.getChattingMessages(partnerId, getRequestKey(), this::handleGetMessages);
     }
 
-    public void scrollToDowm() {
+    public void scrollToDown() {
         if (null != scrollView)
             scrollView.post(() -> {
                 Logs.log("Scroll to TOP");
@@ -76,7 +76,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
 
         SharedPreferenceUtil.setChattingData(sharedpreferences, partner, response);
         populateMessages(response.getMessageList());
-        scrollToDowm();
+        scrollToDown();
         markAsRead();
     }
 
@@ -150,10 +150,13 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
             loadMessages();
             return;
         }
-        chattingData.setUnreadMessages(0);
-        Logs.log("chattingData COUNT:", chattingData.getMessages().size());
-        SharedPreferenceUtil.setChattingData(sharedpreferences, partner.getRequestId(), chattingData);
+        removeUnreadMessage(chattingData);
         populateMessages(chattingData.getMessages());
+    }
+
+    private void removeUnreadMessage(ChattingData chattingData) {
+        chattingData.setUnreadMessages(0);
+        SharedPreferenceUtil.setChattingData(sharedpreferences, partner.getRequestId(), chattingData);
     }
 
     private void sendMessage(View view) {
@@ -162,7 +165,7 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
             return;
         }
         loader.setVisibility(View.VISIBLE);
-        scrollToDowm();
+        scrollToDown();
         handler.sendMessage(partner.getRequestId(), getRequestKey(), message, this::handleSendMessage);
     }
 
@@ -180,14 +183,14 @@ public class ChatRoomFragment extends BaseFragment<ChatRoomFragmentHandler> {
     }
 
     public void appendNewChatMessage(WebResponse response) {
-
+        Logs.log("appendNewChatMessage......");
         getActivity().runOnUiThread(() -> {
             ChatMessageItem chatMessageItem = new ChatMessageItem(response.getChatMessage(), getActivity(), myAccount, partner);
             messagesLayout.addView(chatMessageItem);
 
             SharedPreferenceUtil.addChattingMessage(sharedpreferences, partner, response.getChatMessage(), false);
             handler.markMessageAsRead(partner);
-            scrollToDowm();
+            scrollToDown();
         });
     }
 
